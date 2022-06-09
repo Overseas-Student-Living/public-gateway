@@ -46,6 +46,7 @@ export function namekoRpcContextMiddleware(
     "nameko.call_id_stack": callIdStack
   };
 
+  // 是否需要根据req.user信息，构建一个jwttoken，放到authorization里，因为property会使用到该上下文去取对应的property
   if (req.auth) {
     workerCtx["nameko.authorization"] = req.auth;
   }
@@ -59,7 +60,7 @@ export function namekoRpcContextMiddleware(
   }
 
   req.rpc = kinopio.buildRpcProxy(workerCtx);
-  log.info("rpc context:\n%j", workerCtx);
+  log.debug("rpc context:\n%j", workerCtx);
 
   next();
 }
