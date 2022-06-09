@@ -17,8 +17,9 @@ export interface User {
   currentRole: string;
 }
 
-async function jwtAuthMiddleware_(req, res, next) {
+async function apiTokenAuthMiddleware_(req, res, next) {
   const apitoken = req.get("apitoken");
+  // 没有apitoken的报错
   if (isString(apitoken)) {
     const result = await getUserFromApiToken(req.rpc, apitoken);
     if (result) {
@@ -38,4 +39,4 @@ async function jwtAuthMiddleware_(req, res, next) {
   next();
 }
 
-export const jwtAuthMiddleware = asyncMiddleware(jwtAuthMiddleware_);
+export const apiTokenAuthMiddleware = asyncMiddleware(apiTokenAuthMiddleware_);
