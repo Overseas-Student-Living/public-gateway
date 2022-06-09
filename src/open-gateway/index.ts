@@ -1,13 +1,16 @@
 import { createApp } from "./app";
+import { getLogger } from "./logger";
 
-export const PORT = 8080;
+const log = getLogger("index");
+
+export const PORT = process.env.PORT || 8080;
 
 createApp()
   .then(app => {
     app.listen(PORT, () => {
-      console.info(`graphql running on port ${PORT}`);
+      log.info(`graphql running on port ${PORT}`);
     });
   })
   .catch(error => {
-    console.error(error);
+    log.error(error);
   });
