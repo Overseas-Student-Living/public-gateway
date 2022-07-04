@@ -23,10 +23,12 @@ docker-login:
 	$(DOCKER_REGISTRY_HOST)
 
 docker-tag:
-	docker tag $(IMAGE_NAME):$(IMAGE_TAG) $(DOCKER_REGISTRY_HOST)/oslbuild/$(IMAGE_NAME):$(IMAGE_TAG)
+	docker tag $(IMAGE_NAME):$(IMAGE_TAG) $(DOCKER_REGISTRY_HOST)/$(DOCKER_REGISTRY_PROJECT)/$(IMAGE_NAME):$(IMAGE_TAG)
 
 docker-push:
-	docker push $(DOCKER_REGISTRY_HOST)/oslbuild/$(IMAGE_NAME):$(IMAGE_TAG)
+	docker push $(DOCKER_REGISTRY_HOST)/$(DOCKER_REGISTRY_PROJECT)/$(IMAGE_NAME):$(IMAGE_TAG)
+
+docker-upload: docker-tag docker-push
 
 docker-save:
 	mkdir docker-images
