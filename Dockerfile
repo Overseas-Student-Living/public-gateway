@@ -10,8 +10,6 @@ WORKDIR /home/node/app
 COPY package.json package.json
 COPY node_modules node_modules
 COPY dist dist
-COPY wait-for-it.sh wait-for-it.sh
-COPY manifest.json manifest.json
 
 EXPOSE 8080
 
