@@ -135,7 +135,7 @@ workflows:
           context: org-global
       - frontend-orb/build_images_with_ci_image:
           context: org-global
-              name: build_images
+          name: build_images
           EXECUTOR_TAG: '16.13.0'
 
       - check_schema:
