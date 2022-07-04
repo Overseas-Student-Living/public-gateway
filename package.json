@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec ts-node src/open-gateway/index.ts",
+    "build": "tsc",
+    "lint": "yarn lint-prettier && yarn lint-ts",
+    "lint-ts": "tsc --noEmit && tslint --format verbose 'src/**/*.ts'",
+    "lint-prettier": "prettier -l 'src/**/*.ts' || echo 'files are different to code formatter, run `yarn prettier` to fix'",
     "prettier": "prettier --write 'src/**/*.ts' && tslint --fix 'src/**/*.ts'"
   },
   "keywords": [],
