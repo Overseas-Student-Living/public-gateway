@@ -30,10 +30,10 @@ docker-push:
 
 docker-save:
 	mkdir docker-images
-	docker save -o docker-images/public-gateway.tar $(IMAGE_NAME):$(IMAGE_TAG)
+	docker save -o docker-images/images.tar $(IMAGE_NAME):$(IMAGE_TAG)
 
 docker-load:
-	docker load -i docker-images/public-gateway.tar
+	docker load -i docker-images/images.tar
 
 deploy-chart:
 	helm upgrade $(IMAGE_NAME) deploy/chart/$(IMAGE_NAME) --install \
