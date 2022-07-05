@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: 15m
 spec:
   rules:
-  - host: "gateway{{ index .Values.subdomainPostfixs .Release.Namespace }}.{{ index .Values.domains .Release.Namespace }}"
+  - host: "public-gateway{{ index .Values.subdomainPostfixs .Release.Namespace }}.{{ index .Values.domains .Release.Namespace }}"
     http:
       paths:
       - backend:
@@ -19,7 +19,7 @@ spec:
           servicePort: {{ .Values.service.externalPort }}
         path: /api
         pathType: Prefix
-  - host: "gateway-{{ .Values.region }}{{ index .Values.subdomainPostfixs .Release.Namespace }}.{{ index .Values.domains .Release.Namespace }}"
+  - host: "public-gateway-{{ .Values.region }}{{ index .Values.subdomainPostfixs .Release.Namespace }}.{{ index .Values.domains .Release.Namespace }}"
     http:
       paths:
       - backend:
@@ -48,7 +48,7 @@ metadata:
     # ingress.kubernetes.io/auth-signin: "https://$host/oauth2_{{ $endpoint }}/start?rd=$request_uri"
 spec:
   rules:
-  - host: "gateway{{ $subdomainPostfix }}.{{ $domain }}"
+  - host: "public-gateway{{ $subdomainPostfix }}.{{ $domain }}"
     http:
       paths:
       - backend:
@@ -63,7 +63,7 @@ metadata:
   name: public-gateway-{{ $endpoint }}-oauth2-proxy
 spec:
   rules:
-  - host: "gateway.{{ $domain }}"
+  - host: "public-gateway.{{ $domain }}"
     http:
       paths:
       - backend:

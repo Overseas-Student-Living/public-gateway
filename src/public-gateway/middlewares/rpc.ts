@@ -9,7 +9,7 @@ import { LOCALES } from "../constants/translation";
 
 const log = getLogger("rpc-contect");
 
-export const kinopio = new Kinopio("open-gateway", {
+export const kinopio = new Kinopio("public-gateway", {
   hostname: process.env.RABBIT_SERVER,
   port: process.env.RABBIT_PORT ? parseInt(process.env.RABBIT_PORT, 10) : 5672,
   vhost: process.env.RABBIT_VHOST,
@@ -26,7 +26,7 @@ export const kinopio = new Kinopio("open-gateway", {
   // onRequest: (svcName, functionName, payload) => {
   // },
   processResponse: response => camelizeKeys(response),
-  queuePrefix: "rpc.reply-open-gateway"
+  queuePrefix: "rpc.reply-public-gateway"
 });
 
 acceptLanguage.languages(LOCALES);

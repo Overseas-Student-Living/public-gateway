@@ -15,7 +15,7 @@ const myFormat = format.printf(info => {
 });
 
 const serviceNameFormat = format(info => {
-  info.service = "open-gateway";
+  info.service = "public-gateway";
   return info;
 });
 
