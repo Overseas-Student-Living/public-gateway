@@ -12,12 +12,19 @@ const logger = getLogger("redis");
 export const redis =
   process.env.SCHEMA_SAVING === "true"
     ? new Proxy({ on: () => void 0 }, {})
-    : new Redis(6379, "localhost", {
-        db: 1
-      });
+    : new Redis(
+        parseInt(process.env.REDIS_PORT, 10) || 6379,
+        process.env.REDIS_SERVER,
+        {
+          db: parseInt(process.env.REDIS_DB, 10)
+        }
+      );
 
 redis.on("connect", () => {
-  logger.info(`redis connect on localhost:6379/1`);
+  logger.info(
+    `redis connect on ${process.env.REDIS_SERVER}:${process.env.REDIS_PORT ||
+      6379}/${process.env.REDIS_DB}`
+  );
 });
 
 export interface CacheStore {
