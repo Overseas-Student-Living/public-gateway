@@ -4,10 +4,7 @@ orbs:
   common-orb: student/common@volatile
 
 version: 2.1
-# jobs is a collection of steps which are executed as a unit, either within a fresh container, or a virtual machine.
 jobs:
-  # 作业
-  # 只定义了一个作业，则该作业必须命名为build，超过一个可更新作业名，需在workflows明确定义并协调运行顺序
   test:
     executor:
       name: frontend-orb/circle-ci-node
@@ -36,97 +33,6 @@ jobs:
           name: lint
           command: yarn run lint
 
-  check_schema:
-    parameters:
-      NAMESPACE:
-        type: string
-
-    machine:
-      image: ubuntu-2004:202201-02
-
-    steps:
-      - checkout
-
-      - common-orb/docker_gcloud_login:
-          GCR_AUTH: false
-
-      - attach_workspace:
-          at: docker-images
-
-      - restore_cache:
-          keys:
-          - dependency-cache-{{ checksum "package.json" }}
-
-      - run:
-          name: check schema
-          command: |
-            docker run --name public-gateway-schema -p 8080:8080 --env REGION=preview -d --env SCHEMA_SAVING=true \
-             us.gcr.io/scomreg/public-gateway:${CIRCLE_SHA1} sh -c "yarn run start"
-
-            curl -sSL https://rover.apollo.dev/nix/latest --insecure | sh
-            export PATH=$HOME/.rover/bin:$PATH
-
-            until $(curl --output /dev/null --silent --head --fail http://127.0.0.1:8080/graphiql); do
-                printf '.'
-                sleep 1
-            done
-
-            rover graph introspect http://127.0.0.1:8080/graphql | rover graph check public-gateway-zg031k@<< parameters.NAMESPACE >> --schema -
-
-  integration_tests:
-    executor: common-orb/python
-
-    steps:
-      - common-orb/initialize
-
-      - attach_workspace:
-          at: docker-images
-
-      - run:
-          name: load gateway images
-          command: |
-            make docker-load
-            make docker-tag
-
-      - run:
-          name: run integration tests
-          no_output_timeout: 30m
-          command: |
-            make gcloud-login
-            mkdir test-logs
-            sudo pip install flake8
-            if [ "$HOTFIX_MODE" != "true" ]; then \
-                INTEGRATION_LOGS_PATH=test-logs/integration-tests.log \
-                NGROK_SUBDOMAIN=payments-ci \
-                make run-integration-tests; fi
-
-      - store_artifacts:
-          path: ~/project/test-logs
-          destination: test-logs
-
-  prod_publish_schema:
-    executor: common-orb/node
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-          - dependency-cache-{{ checksum "package.json" }}
-
-      - attach_workspace:
-          at: schema
-
-      - run:
-          name: init circleci image
-          command: ../init.sh
-
-      - run:
-          name: upload schema
-          environment:
-            APOLLO_ENGINE_API_KEY_NAME: APOLLO_ENGINE_API_KEY_PROD
-          command: make publish-schema
-
 workflows:
   version: 2
   do-it-all:
@@ -137,23 +43,6 @@ workflows:
           context: org-global
           name: build_images
           EXECUTOR_TAG: '16.13.0'
-
-      - check_schema:
-          name: check_stage_schema
-          context: org-global
-          NAMESPACE: stage
-          requires:
-            - push_ap_image
-
-      - check_schema:
-          name: check_prod_schema
-          context: org-global
-          NAMESPACE: prod
-          filters:
-            branches:
-              only: master
-          requires:
-            - push_ap_image
 
       - common-orb/upload_image:
           name: push_ap_image
@@ -224,7 +113,7 @@ workflows:
           context: org-global
           type: approval
           requires:
-            - check_prod_schema
+            - push_ap_image
           filters:
             branches:
               only: master
