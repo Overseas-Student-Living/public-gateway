@@ -209,11 +209,11 @@ workflows:
           context: org-global
           type: approval
           requires:
-            - check_stage_schema
+            - push_ap_image
 
       - common-orb/stage_deploy:
           name: deploy_stage_ap
-          REPLICA_COUNT: 2
+          REPLICA_COUNT: 1
           TAG_MIGRATION: false
           DEPLOY_TO_AP: true
           context: org-global
@@ -231,7 +231,7 @@ workflows:
 
       - common-orb/prod_deploy:
           name: deploy_prod_ap
-          REPLICA_COUNT: 6
+          REPLICA_COUNT: 1
           DEPLOY_TO_AP: true
           TAG_MIGRATION: false
           context: org-global
