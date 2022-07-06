@@ -91,6 +91,17 @@ run:
 	-p 8080:8080 \
 	$(IMAGE_NAME):$(IMAGE_TAG)
 
+nodemon:
+	yarn run nodemon
+
+develop_:
+	yarn run develop
+
+develop:
+	yarn run clean
+	yarn run build
+	$(MAKE) -j2 nodemon develop_
+
 sentry-release-create:
 	sentry-cli releases new $(GIT_SHA)
 

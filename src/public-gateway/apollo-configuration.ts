@@ -1,5 +1,6 @@
 import { ApolloServer } from "apollo-server-express";
 import { generateTypeGraphqlSchema } from "./type-graphql";
+import { tracerRequestHandler, tracerResponseHandler } from "./middlewares";
 
 const getApolloConfig = () => {
   if (process.env.APOLLO_ENGINE_API_KEY) {
@@ -21,11 +22,26 @@ export async function generateApolloConfiguration() {
     debug: process.env.APOLLO_DEBUG === "true",
     apollo: getApolloConfig(),
     plugins: [],
-    context: ({ req, res }) => ({
-      req,
-      res,
-      rpc: req.rpc
-    })
+    context: ({ req, res }) => {
+      tracerRequestHandler(req, res);
+      return {
+        req,
+        res,
+        rpc: req.rpc
+      };
+    },
+    formatResponse(responseBody, gqlOptions) {
+      tracerResponseHandler(
+        gqlOptions.context.req,
+        gqlOptions.context.res,
+        null,
+        {
+          responseBody,
+          responseStatus: responseBody.errors ? "error" : "success"
+        }
+      );
+      return responseBody;
+    }
   };
 }
 
