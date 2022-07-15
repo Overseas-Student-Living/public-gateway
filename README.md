@@ -13,6 +13,11 @@ Yarn: https://yarnpkg.com/lang/en/docs/install/
 ### Installation dependencies
 > yarn install
 
+> cp .env.dist .env => already install an package called dotenv to load config file from local .env
+
 # 二、Basic commands
 ## 1、run project
 > make develop
+
+## 2. Test your api
+type http://localhost:8080/graphql in your browser, then you will be redirected to apollo test server which also equals to https://studio.apollographql.com/sandbox/explorer, you can changed your server by edit sandbox box.
