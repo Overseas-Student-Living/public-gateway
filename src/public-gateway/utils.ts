@@ -1,5 +1,4 @@
 import * as assert from "assert";
-import { ceil } from "lodash";
 
 export const asyncMiddleware = (middleware) => (req, res, next) => {
   Promise.resolve(middleware(req, res, next)).catch(next);
@@ -50,13 +49,4 @@ export function decodeNodeIdForType(nodeId, expectedType) {
   const { id, type } = decodeNodeId(nodeId);
   assert.strictEqual(type, expectedType, `invalid ${expectedType} id`);
   return id;
-}
-
-export function calculatePageInfo(pageNumber, pageSize, count) {
-  return {
-    pageSize,
-    currentPage: pageNumber,
-    total: count,
-    totalPages: ceil(count / pageSize),
-  };
 }
