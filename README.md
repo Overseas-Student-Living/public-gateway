@@ -2,6 +2,12 @@
 
 welcome to public-gateway project ～
 
+Default server:
+ - prod: https://public-gateway.student.com/graphql
+ - stage: https://public-gateway.dandythrust.com/graphql
+ - uat1: https://public-gateway-uat1.dandythrust.com/graphql
+ - localhost: http://localhost:8080/graphql
+
 # 一、Installation
 
 ### Prerequisites
@@ -30,7 +36,12 @@ Yarn: https://yarnpkg.com/lang/en/docs/install/
 
 ## 2. Test your api
 
-type http://localhost:8080/graphql in your browser, then you will be redirected to apollo test server which also equals to https://studio.apollographql.com/sandbox/explorer, you can changed your server by edit sandbox box.
+Local:
+    type http://localhost:8080/graphql in your browser, then you will be redirected to apollo test server which also equals to https://studio.apollographql.com/sandbox/explorer, you can changed your server by edit sandbox box.
+
+Remote:
+    Type https://studio.apollographql.com/sandbox/explorer in your browser, then changed the server to your remote server.
+    For example I want to test uat1 server, so I type https://public-gateway-uat1.dandythrust.com/graphql in my sandbox.
 
 # Attention:
 
