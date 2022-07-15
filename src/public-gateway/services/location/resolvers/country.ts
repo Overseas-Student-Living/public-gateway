@@ -13,7 +13,7 @@ import {
   Country,
   GetCountriesArgs,
   GetCountriesPayload,
-} from "../schemas/Country";
+} from "../schemas/country";
 import { isEmpty } from "lodash";
 
 @Resolver(Country)
