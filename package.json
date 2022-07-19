@@ -21,6 +21,7 @@
     "accept-language": "^3.0.18",
     "apollo-server-express": "^3.3.0",
     "class-validator": "^0.13.1",
+    "dotenv": "^16.0.1",
     "express": "^4.15.4",
     "graphql": "^15.3.0",
     "humps": "^2.0.1",
