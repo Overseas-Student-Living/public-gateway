@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: public-gateway
+  namespace: prod
+data:
+  DISABLE_LOG_COLORS: 'true'
+  DOMAIN: student.com
+  RABBIT_SERVER: rabbitmq-services
+  S3_POLICY: '{"Version":"2012-10-17","Statement":[{"Sid":"Stmt1487323648000","Effect":"Allow","Action":["s3:*"],"Resource":["arn:aws:s3:::prod-osl-video-sources-ap-southeast-1/*"]}]}'
+  S3_UPLOAD_ROLE: 'arn:aws:iam::091107424697:role/prodS3Video'
+  S3_VIDEO_BUCKET: 'prod-osl-video-sources-ap-southeast-1'
+  MESSAGE_CENTER_API_HOST: https://message-center-server.student.com
+  IMAGE_CDN_HOST: student.com
+  AWS_S3_OPPORTUNITY_DOCUMENT_BUCKET: prod-opportunity-documents
+  AWS_S3_REGION: ap-southeast-1
+  AWS_S3_BULK_UPDATE_OPP_FOLDER: opp_bulk_update
+  AWS_S3_STORM_FRONTEND_BUCKET: prod-osl-storm-frontend-static.eu-west-1
+  AWS_S3_STORM_FRONTEND_REGION: eu-west-1
+  AWS_S3_STORM_FRONTEND_FOLDER: payment-terms
+  AWS_S3_STORM_FRONTEND_DOMAIN: https://cdn.student.com/
+  STUDENT_SUITE_GRAPHQL_ENDPOINT: https://gibbs-gateway.student.com/api
+  STUDENT_SUITE_AUTHORIZATION: Authorization
+  XHJ_CERTIFICATION_RETURN_RUL: https://cdn.student.com/bundles/swagger/images/public/static/html/authentication.html
+  XHJ_SIGN_RETURN_RUL: https://cdn.student.com/bundles/swagger/images/public/static/html/contracting.html
+  APOLLO_SCHEMA_REPORTING: 'true'
+  APOLLO_DEBUG: 'false'
+  ENV: PROD
+

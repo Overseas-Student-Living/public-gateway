@@ -1,0 +1,44 @@
+{{ if .Values.enableTester }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-tester
+  labels:
+    app: {{ .Chart.Name }}-tester
+    chart: {{ .Chart.Name }}
+    release: {{ .Release.Name }}-{{ .Release.Revision }}
+    tag: {{ .Values.image.tag }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-tester
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-tester
+        loggingVersion: "1"
+        appType: nameko
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-tester
+          image: "{{ .Values.image.repository }}/{{ .Values.image.user }}/public-gateway-test:{{ .Values.gitSha }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          envFrom:
+            - configMapRef:
+                name: common-rabbit
+            - configMapRef:
+                name: common-mysql
+            - configMapRef:
+                name: common-redis
+            - secretRef:
+                name: common
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+      serviceAccountName: scom-account
+      restartPolicy: Always
+{{ end }}

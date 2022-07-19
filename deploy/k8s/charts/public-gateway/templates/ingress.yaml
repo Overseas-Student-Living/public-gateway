@@ -1,0 +1,75 @@
+{{ if .Values.enableIngress }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: public-gateway-graphql
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 15m
+spec:
+  rules:
+  - host: "public-gateway{{ index .Values.subdomainPostfixs .Release.Namespace }}.{{ index .Values.domains .Release.Namespace }}"
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Chart.Name }}
+          servicePort: {{ .Values.service.externalPort }}
+        path: /graphql
+      - backend:
+          serviceName: {{ .Chart.Name }}
+          servicePort: {{ .Values.service.externalPort }}
+        path: /api
+        pathType: Prefix
+  - host: "public-gateway-{{ .Values.region }}{{ index .Values.subdomainPostfixs .Release.Namespace }}.{{ index .Values.domains .Release.Namespace }}"
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Chart.Name }}
+          servicePort: {{ .Values.service.externalPort }}
+        path: /graphql
+      - backend:
+          serviceName: {{ .Chart.Name }}
+          servicePort: {{ .Values.service.externalPort }}
+        path: /api
+        pathType: Prefix
+{{- $nameSpace := .Release.Namespace -}}
+{{- $chartName := .Chart.Name -}}
+{{- $domain := index .Values.domains .Release.Namespace -}}
+{{- $subdomainPostfix := index .Values.subdomainPostfixs .Release.Namespace -}}
+{{- $region := .Values.region -}}
+{{- $externalPort := .Values.service.externalPort -}}
+{{- range $endpoint := .Values.oauthProxy.endpoints }}
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: public-gateway-{{ $endpoint }}
+  # annotations:
+    # ingress.kubernetes.io/auth-url: "https://$host/oauth2_{{ $endpoint }}/auth"
+    # ingress.kubernetes.io/auth-signin: "https://$host/oauth2_{{ $endpoint }}/start?rd=$request_uri"
+spec:
+  rules:
+  - host: "public-gateway{{ $subdomainPostfix }}.{{ $domain }}"
+    http:
+      paths:
+      - backend:
+          serviceName: {{ $chartName }}
+          servicePort: {{ $externalPort }}
+        path: /{{ $endpoint }}
+---
+{{ if or (eq $nameSpace "stage") (eq $nameSpace "prod") }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: public-gateway-{{ $endpoint }}-oauth2-proxy
+spec:
+  rules:
+  - host: "public-gateway.{{ $domain }}"
+    http:
+      paths:
+      - backend:
+          serviceName: {{ $chartName }}-{{ $endpoint }}-oauth2-proxy
+          servicePort: 4180
+        path: /oauth2_{{ $endpoint }}
+{{- end }}
+{{- end }}
+{{- end }}

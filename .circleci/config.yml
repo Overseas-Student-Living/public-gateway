@@ -1,0 +1,132 @@
+
+orbs:
+  frontend-orb: student/frontend-app@volatile
+  common-orb: student/common@volatile
+
+version: 2.1
+jobs:
+  test:
+    executor:
+      name: frontend-orb/circle-ci-node
+      tag: "16.13.0"
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - common-orb/docker_gcloud_login:
+          GCR_AUTH: false
+
+      - restore_cache:
+          keys:
+          - dependency-cache-{{ checksum "package.json" }}
+
+      - run:
+          name: install test dependencies
+          command: yarn install
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+
+      - run:
+          name: lint
+          command: yarn run lint
+
+workflows:
+  version: 2
+  do-it-all:
+    jobs:
+      - test:
+          context: org-global
+      - frontend-orb/build_images_with_ci_image:
+          context: org-global
+          name: build_images
+          EXECUTOR_TAG: '16.13.0'
+
+      - common-orb/upload_image:
+          name: push_ap_image
+          context: org-global
+          PUSH_TO_AP: true
+          requires:
+            - build_images
+            - test
+
+      - approval_uat1_ap:
+          type: approval
+          requires:
+            - push_ap_image
+
+      - common-orb/deploy_uat_ap:
+          name: deploy_uat1_ap
+          NAMESPACE: uat1
+          REPLICA_COUNT: 1
+          TAG_MIGRATION: false
+          context: org-global
+          requires:
+            - approval_uat1_ap
+
+      - approval_uat2_ap:
+          type: approval
+          requires:
+            - push_ap_image
+
+      - common-orb/deploy_uat_ap:
+          name: deploy_uat2_ap
+          NAMESPACE: uat2
+          REPLICA_COUNT: 1
+          TAG_MIGRATION: false
+          context: org-global
+          requires:
+            - approval_uat2_ap
+
+      - approval_uat3_ap:
+          type: approval
+          requires:
+            - push_ap_image
+
+      - common-orb/deploy_uat_ap:
+          name: deploy_uat3_ap
+          NAMESPACE: uat3
+          REPLICA_COUNT: 1
+          TAG_MIGRATION: false
+          context: org-global
+          requires:
+            - approval_uat3_ap
+
+      - approval_stage_ap:
+          context: org-global
+          type: approval
+          requires:
+            - push_ap_image
+
+      - common-orb/stage_deploy:
+          name: deploy_stage_ap
+          REPLICA_COUNT: 1
+          TAG_MIGRATION: false
+          DEPLOY_TO_AP: true
+          context: org-global
+          requires:
+            - approval_stage_ap
+
+      - approval_prod_ap:
+          context: org-global
+          type: approval
+          requires:
+            - push_ap_image
+          filters:
+            branches:
+              only: master
+
+      - common-orb/prod_deploy:
+          name: deploy_prod_ap
+          REPLICA_COUNT: 1
+          DEPLOY_TO_AP: true
+          TAG_MIGRATION: false
+          context: org-global
+          requires:
+            - approval_prod_ap
+
+notify:
+  webhooks:
+    - url: https://devstats.dandythrust.com/circle

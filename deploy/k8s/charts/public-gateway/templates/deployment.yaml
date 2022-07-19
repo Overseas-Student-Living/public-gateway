@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+    chart: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
+    tag: {{ .Values.gitSha }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.user }}/public-gateway:{{ .Values.gitSha }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthcheck
+              port: {{ .Values.service.internalPort }}
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 30
+          envFrom:
+            - configMapRef:
+                name: common-rabbit
+            - configMapRef:
+                name: common-redis
+            - configMapRef:
+                name: public-gateway
+            - secretRef:
+                name: common
+            - secretRef:
+                name: public-gateway
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: SENTRY_RELEASE
+              value: {{ .Values.gitSha }}
+            - name: SENTRY_ENVIRONMENT
+              value: {{ .Release.Namespace }}
+            - name: REGION
+              value: {{ .Values.region }}
+          resources:
+            requests:
+              cpu: 300m
+              memory: 600Mi
+            limits:
+              memory: 1024Mi
+      serviceAccountName: scom-account
+      {{- if .Values.archs }}
+        {{- if or (eq "amd64" .Values.archs) (eq "arm64" .Values.archs) }}
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.archs }}
+        {{- end }}
+        {{- if (ne "amd64" .Values.archs) }}
+      tolerations:
+        - key: "arch"
+          operator: "Equal"
+          value: "arm64"
+          effect: "NoSchedule"
+        {{- end }}
+      {{- end }}
+      restartPolicy: Always

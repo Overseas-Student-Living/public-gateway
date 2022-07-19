@@ -1,0 +1,44 @@
+replicaCount: 2
+image:
+  repository: us.gcr.io/scomreg
+  name: public-gateway
+  pullPolicy: IfNotPresent
+service:
+  externalPort: 80
+  internalPort: 8080
+gitSha: abc123
+domains:
+  uat1: dandythrust.com
+  uat2: dandythrust.com
+  uat3: dandythrust.com
+  stage: dandythrust.com
+  prod: student.com
+subdomainPostfixs:
+  uat1: -uat1
+  uat2: -uat2
+  uat3: -uat3
+  stage:
+  prod:
+region: ap
+
+oauthProxy:
+  image:
+    ap: us.gcr.io/scomreg/oauth2_proxy:latest
+    cn: docker-cn-north-1.dandythrust.com/oslbuild/oauth2_proxy:latest
+  endpoints:
+  - voyager
+  - graphiql
+  - playground
+enableIngress: true
+enableTester: false
+
+hpa:
+  prod:
+    minReplicas: 6
+    maxReplicas: 15
+  stage:
+    minReplicas: 2
+    maxReplicas: 4
+  uat:
+    minReplicas: 1
+    maxReplicas: 2

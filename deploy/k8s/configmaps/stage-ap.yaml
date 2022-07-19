@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: public-gateway
+  namespace: stage
+data:
+  DISABLE_LOG_COLORS: 'true'
+  DOMAIN: dandythrust.com
+  RABBIT_SERVER: rabbitmq-services
+  S3_POLICY: '{"Version":"2012-10-17","Statement":[{"Sid":"VisualEditor1","Effect":"Allow","Action":"s3:*","Resource":"arn:aws:s3:::stage-osl-video-sources-ap-southeast-1/*"}]}'
+  S3_UPLOAD_ROLE: 'arn:aws:iam::091107424697:role/stageS3Video'
+  S3_VIDEO_BUCKET: 'stage-osl-video-sources-ap-southeast-1'
+  MESSAGE_CENTER_API_HOST: https://message-center-server.dandythrust.com
+  IMAGE_CDN_HOST: dandythrust.com
+  AWS_S3_OPPORTUNITY_DOCUMENT_BUCKET: stage-opportunity-documents
+  AWS_S3_REGION: ap-southeast-1
+  AWS_S3_BULK_UPDATE_OPP_FOLDER: opp_bulk_update
+  AWS_S3_STORM_FRONTEND_BUCKET: stage-osl-storm-frontend-static.eu-west-1
+  AWS_S3_STORM_FRONTEND_REGION: eu-west-1
+  AWS_S3_STORM_FRONTEND_FOLDER: payment-terms
+  AWS_S3_STORM_FRONTEND_DOMAIN: https://storm-frontend-cdn.dandythrust.com/
+  STUDENT_SUITE_GRAPHQL_ENDPOINT: https://gateway.project-g66.com/api
+  STUDENT_SUITE_AUTHORIZATION: Authorization
+  XHJ_CERTIFICATION_RETURN_RUL: https://storm-frontend-cdn.dandythrust.com/bundles/swagger/images/public/static/html/authentication.html
+  XHJ_SIGN_RETURN_RUL: https://storm-frontend-cdn.dandythrust.com/bundles/swagger/images/public/static/html/contracting.html
+  APOLLO_SCHEMA_REPORTING: 'true'
+  APOLLO_DEBUG: 'false'
+  ENV: STAGE

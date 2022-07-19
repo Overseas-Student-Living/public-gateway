@@ -1,0 +1,4 @@
+apiVersion: v1
+description: The gateway to all things platform
+name: public-gateway
+version: 1.0.0
