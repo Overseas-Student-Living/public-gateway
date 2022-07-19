@@ -7,7 +7,12 @@ export async function generateApolloConfiguration() {
     schema,
     introspection: true,
     debug: process.env.APOLLO_DEBUG === "true",
-    plugins: []
+    plugins: [],
+    context: ({ req, res }) => ({
+      req,
+      res,
+      rpc: req.rpc
+    })
   };
 }
 
