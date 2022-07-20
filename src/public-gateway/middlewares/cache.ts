@@ -8,7 +8,6 @@ const logger = getLogger("redis");
 /**
  * Set up redis connection
  */
-// TODO 根据配置连接redis
 export const redis =
   process.env.SCHEMA_SAVING === "true"
     ? new Proxy({ on: () => void 0 }, {})

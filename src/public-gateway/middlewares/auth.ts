@@ -32,7 +32,7 @@ async function apiTokenAuthMiddleware_(req, res, next) {
       req.user = {
         roleId: result.roleId,
         uuid: result.uuid,
-        currentRole: currentRole,
+        currentRole: currentRole
       };
 
       // get current role scope from cache
@@ -40,7 +40,7 @@ async function apiTokenAuthMiddleware_(req, res, next) {
       let currentScopes = await req.cache.get(keyForRoleScope(currentRole));
       if (!currentScopes) {
         await req.rpc.users.refresh_role_scopes({
-          args: [{ role: currentRole }],
+          args: [{ role: currentRole }]
         });
         currentScopes = await req.cache.get(keyForRoleScope(currentRole));
       }
@@ -52,7 +52,7 @@ async function apiTokenAuthMiddleware_(req, res, next) {
     } else {
       return res.status(401).json({
         data: null,
-        errors: [{ code: "UNAUTHORISED", message: "invalid apitoken" }],
+        errors: [{ code: "UNAUTHORISED", message: "invalid apitoken" }]
       });
     }
   }

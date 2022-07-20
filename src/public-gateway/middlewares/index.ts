@@ -1,12 +1,10 @@
 import { apiTokenAuthMiddleware } from "./auth";
 import { callIdMiddleware } from "./call-id";
 import { tracerRequestMiddleware, tracerResponseMiddleware } from "./tracer";
-import { namekoRpcContextMiddleware} from "./rpc";
+import { namekoRpcContextMiddleware } from "./rpc";
 import { cacheContextMiddleware } from "./cache";
 
 const serviceName = process.env.IMAGE_NAME || "public-gateway";
-
-
 
 const tracerOptions = {
   serviceName,

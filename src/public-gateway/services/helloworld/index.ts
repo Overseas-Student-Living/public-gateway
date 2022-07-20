@@ -1,3 +1,3 @@
 import { HelloworldResolver } from "./resolvers/helloworld";
 
-export const helloworldResolver = [HelloworldResolver];
+export const HelloworldResolvers = [HelloworldResolver];

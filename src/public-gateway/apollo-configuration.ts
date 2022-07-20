@@ -6,9 +6,9 @@ const getApolloConfig = () => {
   if (process.env.APOLLO_ENGINE_API_KEY) {
     return {
       key: process.env.APOLLO_ENGINE_API_KEY,
-      graphRef: `${process.env.APOLLO_ENGINE_API_KEY.split(':')[1]}@${(
-        process.env.ENV || 'stage'
-      ).toLowerCase()}`,
+      graphRef: `${process.env.APOLLO_ENGINE_API_KEY.split(":")[1]}@${(
+        process.env.ENV || "stage"
+      ).toLowerCase()}`
     };
   }
   return undefined;
