@@ -1,6 +1,6 @@
 import * as assert from "assert";
 
-export const asyncMiddleware = (middleware) => (req, res, next) => {
+export const asyncMiddleware = middleware => (req, res, next) => {
   Promise.resolve(middleware(req, res, next)).catch(next);
 };
 
@@ -20,7 +20,7 @@ export function transFrontendScopesToBackend(frontendScopes: any) {
 
 export function encodeNodeId(type, id) {
   const jsonVal = JSON.stringify({ type, id });
-  return Buffer.from(jsonVal).toString('base64');
+  return Buffer.from(jsonVal).toString("base64");
 }
 
 export function decodeNodeId(nodeId) {

@@ -2,7 +2,7 @@ import { Field, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class PageInfo {
-  @Field(() => String)
+  @Field(() => Int)
   total: number;
   @Field(() => Int)
   totalPages: number;
