@@ -8,7 +8,7 @@ import {
   Resolver,
   FieldResolver,
   Root,
-  Authorized
+  Authorized,
 } from "type-graphql";
 
 import { Context } from "../../../types/utils";
@@ -16,7 +16,7 @@ import { encodeNodeId } from "../../../utils";
 import {
   createProperty,
   getProperty,
-  getProperties
+  getProperties,
 } from "../../../rpc/property";
 import { getCity } from "../../../rpc/location";
 import { BookingJourney } from "../../enum";
@@ -25,10 +25,11 @@ import {
   CreatePropertyPayload,
   GetPropertiesArgs,
   GetPropertiesPayload,
-  Property
+  Property,
 } from "../schemas/property";
 import { landlordFuncPerm } from "../../perm";
 import { decodeBase64 } from "../../../decorators/base64";
+import { groupFacilities } from "../utils";
 
 @Resolver(() => Property)
 export class PropertyResolver {
@@ -62,8 +63,8 @@ export class PropertyResolver {
         total: res.numResults,
         totalPages: res.numPages,
         currentPage: args.pageNumber,
-        pageSize: args.pageSize
-      }
+        pageSize: args.pageSize,
+      },
     };
   }
 
@@ -131,5 +132,13 @@ export class PropertyResolver {
   bookingType(@Root() root: Property) {
     // @ts-ignore
     return root.bookingJourney;
+  }
+
+  @FieldResolver()
+  async facilities(@Root() root: Property, @Ctx() context: Context) {
+    const facilities = await context.rpc.properties.list_property_facilities({
+      args: [root.id],
+    });
+    return groupFacilities(facilities);
   }
 }

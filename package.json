@@ -12,7 +12,8 @@
     "prettier": "prettier --write 'src/**/*.ts' && tslint --fix 'src/**/*.ts'",
     "clean": "rm -rf dist",
     "develop": "tsc -w",
-    "nodemon": "nodemon --inspect -d 1 -e ts -w src dist/index.js"
+    "nodemon": "nodemon --inspect -d 1 -e ts -w src dist/index.js",
+    "test": "node -r dotenv/config node_modules/.bin/jest --config jest.config.json"
   },
   "keywords": [],
   "author": "",

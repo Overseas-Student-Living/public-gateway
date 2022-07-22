@@ -33,6 +33,10 @@ jobs:
           name: lint
           command: yarn run lint
 
+      - run:
+          name: test
+          command: yarn run test
+
 workflows:
   version: 2
   do-it-all:

@@ -34,4 +34,7 @@ interface PropertyService extends ServiceBase {
   create_property: rpcMethod;
   list_active_properties: rpcMethod;
   page_active_properties: rpcMethod;
+  list_facilities: rpcMethod;
+  operate_property_facilities: rpcMethod;
+  list_property_facilities: rpcMethod;
 }
