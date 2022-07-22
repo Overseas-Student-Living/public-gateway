@@ -38,7 +38,7 @@ import { listTermsAndConditionsForProperty } from "../../../rpc/payment";
 export class PropertyResolver {
   @Query(() => Property)
   @decodeBase64(["id"])
-  async property(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
+  async getProperty(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
     // 是否需要判断该property是否属于该landlord
     return await getProperty(context.rpc, id);
   }

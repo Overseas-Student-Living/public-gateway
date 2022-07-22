@@ -15,7 +15,6 @@ export const getUserFromApiToken = async (rpc: RpcContext, apitoken) => {
     //   uuid: "",
     //   email: "",
     //   role: "landlord",
-    //   scopes: {}
     // };
   } catch (error) {
     log.error("getUserFromApiToken error: %s", error);
