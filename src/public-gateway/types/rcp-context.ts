@@ -38,6 +38,7 @@ interface PropertyService extends ServiceBase {
   update_property_details: rpcMethod;
   list_facilities: rpcMethod;
   operate_property_facilities: rpcMethod;
+  list_property_facilities: rpcMethod;
 }
 
 interface PaymentService extends ServiceBase {

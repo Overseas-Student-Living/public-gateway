@@ -12,8 +12,9 @@ import {
 import { resolvers as scalar } from "../../../scalars";
 import { PageInfo } from "../../common";
 import { BillingCycle, BookingJourney } from "../../enum";
-import { ApartmentType, FreeCancellationPeriod, PropertyStatus } from "../enum";
 import { PropertyTerm } from "./terms";
+import { ApartmentType, FreeCancellationPeriod, PropertyStatus } from "../enum";
+import { PropertyFacilities } from "./facilities";
 
 // ObjectType
 @ObjectType()
@@ -64,6 +65,9 @@ export class Property {
 
   @Field(() => [PropertyTerm])
   propertyTerms: PropertyTerm[];
+
+  @Field(() => PropertyFacilities)
+  facilities: PropertyFacilities;
 }
 
 @ObjectType()

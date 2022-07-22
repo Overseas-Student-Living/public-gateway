@@ -33,6 +33,7 @@ import { landlordFuncPerm } from "../../perm";
 import { decodeBase64 } from "../../../decorators/base64";
 import { PropertyTerm } from "../schemas/terms";
 import { listTermsAndConditionsForProperty } from "../../../rpc/payment";
+import { groupFacilities } from "../utils";
 
 @Resolver(() => Property)
 export class PropertyResolver {
@@ -151,5 +152,13 @@ export class PropertyResolver {
   @FieldResolver(() => [PropertyTerm])
   async propertyTerms(@Root() root: Property, @Ctx() context: Context) {
     return await listTermsAndConditionsForProperty(context.rpc, root.id);
+  }
+
+  @FieldResolver()
+  async facilities(@Root() root: Property, @Ctx() context: Context) {
+    const facilities = await context.rpc.properties.list_property_facilities({
+      args: [root.id]
+    });
+    return groupFacilities(facilities);
   }
 }
