@@ -1,3 +1,4 @@
+// TODO: Update when authorize at role level
 const updatePropertyLayerIsOwnParams = [
   {
     level: "property",
