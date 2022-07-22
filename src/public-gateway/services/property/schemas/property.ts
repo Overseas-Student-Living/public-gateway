@@ -12,7 +12,8 @@ import {
 import { resolvers as scalar } from "../../../scalars";
 import { PageInfo } from "../../common";
 import { BillingCycle, BookingJourney } from "../../enum";
-import { ApartmentType, PropertyStatus } from "../enum";
+import { ApartmentType, FreeCancellationPeriod, PropertyStatus } from "../enum";
+import { PropertyTerm } from "./terms";
 
 // ObjectType
 @ObjectType()
@@ -60,6 +61,9 @@ export class Property {
   descriptionCn: string;
   @Field(() => String)
   description: string;
+
+  @Field(() => [PropertyTerm])
+  propertyTerms: PropertyTerm[];
 }
 
 @ObjectType()
@@ -125,6 +129,37 @@ export class CreatePropertyInput {
   @MaxLength(400)
   @Field(() => scalar.NonEmptyString, { nullable: false })
   description: string;
+
+  @Field(() => String)
+  cancellationProcess: string;
+
+  @Field(() => FreeCancellationPeriod)
+  freeCancellationPeriod: FreeCancellationPeriod;
+
+  @Field(() => Boolean)
+  noVisaNoPay: boolean;
+  @Field(() => Boolean)
+  noPlaceNoPay: boolean;
+}
+
+@InputType()
+export class UpdatePropertyPolicyInput {
+  @Directive('@decodeID(type: "Property", required: true)')
+  @Field(() => ID, { nullable: false })
+  propertyId: string;
+
+  // only for mannual
+  @Field(() => String)
+  cancellationProcess: string;
+
+  @Field(() => FreeCancellationPeriod)
+  freeCancellationPeriod: FreeCancellationPeriod;
+
+  @Field(() => Boolean)
+  noVisaNoPay: boolean;
+
+  @Field(() => Boolean)
+  noPlaceNoPay: boolean;
 }
 
 // ArgsType

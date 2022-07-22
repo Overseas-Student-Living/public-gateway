@@ -1,3 +1,4 @@
+import { graphqlUploadExpress } from "graphql-upload";
 import { apiTokenAuthMiddleware } from "./auth";
 import { callIdMiddleware } from "./call-id";
 import { tracerRequestMiddleware, tracerResponseMiddleware } from "./tracer";
@@ -14,6 +15,7 @@ export const tracerRequestHandler = tracerRequestMiddleware(tracerOptions);
 export const tracerResponseHandler = tracerResponseMiddleware(tracerOptions);
 
 const middlewares = [
+  graphqlUploadExpress(),
   callIdMiddleware({ serviceName }),
   namekoRpcContextMiddleware,
   cacheContextMiddleware,
