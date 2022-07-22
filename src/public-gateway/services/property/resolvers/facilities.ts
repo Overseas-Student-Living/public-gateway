@@ -1,44 +1,32 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { Context } from "../../../types/utils";
 import {
   Facility,
   GetFacilitiesPayload,
+  PropertyFacility,
   UpdatePropertyFacilitiesInput,
   UpdatePropertyFacilitiesPayload,
 } from "../schemas/facilities";
-import { isEmpty } from "lodash";
-import { updatePropertyFacilitiesPerm } from "../perm";
+import { groupFacilities } from "../utils";
 
 @Resolver(Facility)
 export class FacilityResolver {
   @Query(() => GetFacilitiesPayload)
   async getFacilities(@Ctx() context: Context) {
     const facilities = await context.rpc.properties.list_facilities();
-    const tagToCategory = {
-      amenity: "features",
-      bills: "bills",
-      security: "security_and_safety",
-      rule: "property_rules",
-    };
-    const res = {
-      features: [],
-      bills: [],
-      security_and_safety: [],
-      property_rules: [],
-    };
-    facilities.forEach((item) => {
-      if (item.tags && !isEmpty(item.tags)) {
-        const category = tagToCategory[item.tags[0]];
-        if (category) {
-          res[category].push(item);
-        }
-      }
-    });
-    return res;
+    return groupFacilities(facilities);
   }
 
   @Mutation(() => UpdatePropertyFacilitiesPayload)
-  @Authorized(updatePropertyFacilitiesPerm)
+  // TODO: Refactor access control on resource level
+  //   @Authorized(updatePropertyFacilitiesPerm)
   async updatePropertyFacilities(
     @Arg("input", () => UpdatePropertyFacilitiesInput)
     input: UpdatePropertyFacilitiesInput,
@@ -51,5 +39,13 @@ export class FacilityResolver {
       },
     });
     return { success };
+  }
+}
+
+@Resolver(PropertyFacility)
+export class PropertyFacilityResolver {
+  @FieldResolver()
+  checked() {
+    return true;
   }
 }

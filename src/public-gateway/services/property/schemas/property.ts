@@ -13,6 +13,7 @@ import { resolvers as scalar } from "../../../scalars";
 import { PageInfo } from "../../common";
 import { BillingCycle, BookingJourney } from "../../enum";
 import { ApartmentType, PropertyStatus } from "../enum";
+import { PropertyFacilities } from "./facilities";
 
 // ObjectType
 @ObjectType()
@@ -60,6 +61,9 @@ export class Property {
   descriptionCn: string;
   @Field(() => String)
   description: string;
+
+  @Field(() => PropertyFacilities)
+  facilities: PropertyFacilities;
 }
 
 @ObjectType()

@@ -1,4 +1,4 @@
-import { Field, ID, InputType, ObjectType } from "type-graphql";
+import { Directive, Field, ID, InputType, ObjectType } from "type-graphql";
 import { FacilityType } from "../enum";
 
 @ObjectType()
@@ -16,19 +16,38 @@ export class Facility {
 }
 
 @ObjectType()
+export class PropertyFacility extends Facility {
+  @Field(() => Boolean)
+  checked: boolean;
+}
+
+@ObjectType()
+export class PropertyFacilities {
+  @Field(() => [PropertyFacility])
+  features: PropertyFacility[];
+  @Field(() => [PropertyFacility])
+  bills: PropertyFacility[];
+  @Field(() => [PropertyFacility])
+  securityAndSafety: PropertyFacility[];
+  @Field(() => [PropertyFacility])
+  propertyRules: PropertyFacility[];
+}
+
+@ObjectType()
 export class GetFacilitiesPayload {
   @Field(() => [Facility])
   features: Facility[];
   @Field(() => [Facility])
   bills: Facility[];
   @Field(() => [Facility])
-  security_and_safety: Facility[];
+  securityAndSafety: Facility[];
   @Field(() => [Facility])
-  property_rules: Facility[];
+  propertyRules: Facility[];
 }
 
 @InputType()
 export class UpdatePropertyFacilitiesInput {
+  @Directive('@decodeID(type: "Property", required: true)')
   @Field(() => ID)
   propertyId: string;
   @Field(() => [String])
