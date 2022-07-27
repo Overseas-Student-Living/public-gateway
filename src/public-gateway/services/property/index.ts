@@ -1,4 +1,11 @@
-import { FacilityResolver, PropertyFacilityResolver } from "./resolvers/facilities";
+import {
+  FacilityResolver,
+  PropertyFacilityResolver
+} from "./resolvers/facilities";
 import { PropertyResolver } from "./resolvers/property";
 
-export const PropertyResolvers = [PropertyResolver, FacilityResolver, PropertyFacilityResolver];
+export const PropertyResolvers = [
+  PropertyResolver,
+  FacilityResolver,
+  PropertyFacilityResolver
+];
