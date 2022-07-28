@@ -56,18 +56,14 @@ export class RoomResolver {
       }
     };
   }
+
   // TODO landlord和property校验
   @Mutation(() => CreateRoomPayload)
   async createRoom(
     @Arg("input", () => CreateRoomInput) input: CreateRoomInput,
     @Ctx() context: Context
   ) {
-    input["categorySlug"] = input.category;
-    input["unitTypeFacilitySlugs"] = input.facilities;
-    input["unitTypeBedSizes"] = input.bedSizes;
-    let size = encodeRoomSize(input.roomSize);
-    input["roomSize"] = size.size;
-    input["roomType"] = size.roomType;
+    formatInput(input);
     const room = await createRoom(context.rpc, input);
     return { room };
   }
@@ -77,12 +73,7 @@ export class RoomResolver {
     @Arg("input", () => UpdateRoomInput) input: UpdateRoomInput,
     @Ctx() context: Context
   ) {
-    input["categorySlug"] = input.category;
-    input["unitTypeFacilitySlugs"] = input.facilities;
-    input["unitTypeBedSizes"] = input.bedSizes;
-    let size = encodeRoomSize(input.roomSize);
-    input["roomSize"] = size.size;
-    input["roomType"] = size.roomType;
+    formatInput(input);
     const room = await updateRoom(context.rpc, input.id, input);
     return { room };
   }
@@ -121,7 +112,7 @@ export class RoomResolver {
   @FieldResolver()
   roomSize(@Root() root: Room) {
     // @ts-ignore
-    return decodeRoomSize(root.roomSize, root.roomType);
+    return encodeRoomSize(root.roomSize, root.roomType);
   }
 
   @FieldResolver()
@@ -130,20 +121,24 @@ export class RoomResolver {
   }
 }
 
-function encodeRoomSize(roomSize: RoomSize) {
-  let size, roomType;
-  if (roomSize.type == RoomSizeType.EXACT) {
-    size = `${roomSize.minimum}`;
-  } else if (roomSize.type == RoomSizeType.MORE_THAN) {
-    size = `${roomSize.minimum}+`;
-  } else {
-    size = `${roomSize.minimum}-${roomSize.maximum}`;
+function formatInput(input) {
+  if (input.category) {
+    input["categorySlug"] = input.category;
   }
-  roomType = roomSize.unitOfArea;
-  return { size, roomType };
+  if (input.facilities) {
+    input["unitTypeFacilitySlugs"] = input.facilities;
+  }
+  if (input.bedSizes) {
+    input["unitTypeBedSizes"] = input.bedSizes;
+  }
+  if (input.roomSize) {
+    let size = decodeRoomSize(input.roomSize);
+    input["roomSize"] = size.size;
+    input["roomType"] = size.roomType;
+  }
 }
 
-function decodeRoomSize(size: String, roomType: String) {
+function encodeRoomSize(size: String, roomType: String) {
   if (!size) {
     return null;
   }
@@ -166,4 +161,17 @@ function decodeRoomSize(size: String, roomType: String) {
     maximum: max,
     unitOfArea: roomType
   };
+}
+
+function decodeRoomSize(roomSize: RoomSize) {
+  let size, roomType;
+  if (roomSize.type == RoomSizeType.EXACT) {
+    size = `${roomSize.minimum}`;
+  } else if (roomSize.type == RoomSizeType.MORE_THAN) {
+    size = `${roomSize.minimum}+`;
+  } else {
+    size = `${roomSize.minimum}-${roomSize.maximum}`;
+  }
+  roomType = roomSize.unitOfArea;
+  return { size, roomType };
 }

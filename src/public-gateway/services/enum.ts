@@ -22,3 +22,13 @@ registerEnumType(BookingJourney, {
   name: "BookingJourney",
   description: "Booking Journey"
 });
+
+export enum DiscountType {
+  ABSOLUTE = "absolute",
+  PERCENTAGE = "percentage"
+}
+
+registerEnumType(DiscountType, {
+  name: "DiscountType",
+  description: "Discount Type"
+});

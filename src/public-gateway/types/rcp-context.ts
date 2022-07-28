@@ -2,6 +2,7 @@ export interface RpcContext {
   users: UsersService;
   locations: LocationService;
   properties: PropertyService;
+  listings: ListingService;
 }
 
 interface RpcPayload {
@@ -42,4 +43,12 @@ interface PropertyService extends ServiceBase {
   update_room: rpcMethod;
   delete_room: rpcMethod;
   list_unit_type_facilities: rpcMethod;
+}
+
+interface ListingService extends ServiceBase {
+  create_listing: rpcMethod;
+  update_listing: rpcMethod;
+  delete_listing: rpcMethod;
+  list_listings: rpcMethod;
+  count_listings: rpcMethod;
 }

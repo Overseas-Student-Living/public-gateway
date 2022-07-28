@@ -1,4 +1,5 @@
 import * as assert from "assert";
+import { ceil } from "lodash";
 
 export const asyncMiddleware = middleware => (req, res, next) => {
   Promise.resolve(middleware(req, res, next)).catch(next);
@@ -7,10 +8,10 @@ export const asyncMiddleware = middleware => (req, res, next) => {
 export function transFrontendScopesToBackend(frontendScopes: any) {
   // backendScope: {'c:bookings.students': {}, 'r:bookings.students': {} }
   const backendScope = {};
-  frontendScopes.map((frontendScope) => {
+  frontendScopes.map(frontendScope => {
     const obj = frontendScope.object;
     const perms = frontendScope.permission;
-    perms.map((perm) => {
+    perms.map(perm => {
       const name = `${perm.toLowerCase()}:${obj}`;
       backendScope[name] = {};
     });
@@ -49,4 +50,14 @@ export function decodeNodeIdForType(nodeId, expectedType) {
   const { id, type } = decodeNodeId(nodeId);
   assert.strictEqual(type, expectedType, `invalid ${expectedType} id`);
   return id;
+}
+
+export function formatPageInfo(list, total, pageNumber, pageSize) {
+  return {
+    pageNumber,
+    pageSize,
+    results: list,
+    numResults: total,
+    numPages: ceil(total / pageSize)
+  };
 }

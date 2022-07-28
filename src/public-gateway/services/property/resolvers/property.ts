@@ -36,7 +36,7 @@ import { groupFacilities } from "../utils";
 export class PropertyResolver {
   @Query(() => GetPropertyPayload)
   @decodeBase64(["id"])
-  async property(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
+  async getProperty(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
     const result = await getProperty(context.rpc, id);
     return { property: result };
   }

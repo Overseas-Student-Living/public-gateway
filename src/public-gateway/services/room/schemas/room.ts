@@ -219,17 +219,17 @@ export class UpdateRoomInput {
   id: string;
   @Field(() => scalar.NonEmptyString)
   name: string;
-  @Field(() => RoomCategory, { nullable: false })
+  @Field(() => RoomCategory)
   category: RoomCategory;
-  @Field(() => scalar.NaturalNumber, { nullable: false })
+  @Field(() => scalar.NaturalNumber)
   bedCount: number;
-  @Field(() => [Int], { nullable: true })
+  @Field(() => [Int])
   floors: number[];
   @Field(() => scalar.NaturalNumber)
   maxOccupancy: number;
   @Field(() => DualOccupancy)
   dualOccupancy: DualOccupancy;
-  @Field(() => BathroomTypeCategory, { nullable: false })
+  @Field(() => BathroomTypeCategory)
   bathroomType: BathroomTypeCategory;
   @Field(() => KitchenArrangement)
   kitchenArrangement: KitchenArrangement;
@@ -251,7 +251,7 @@ export class UpdateRoomInput {
   @Field(() => [String])
   facilities: string[];
 
-  @Field(() => BedSizeType, { nullable: false })
+  @Field(() => BedSizeType)
   bedSizeType: BedSizeType;
   @Field(() => [BedSizesInput])
   bedSizes: BedSizesInput[];
