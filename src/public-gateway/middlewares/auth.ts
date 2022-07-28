@@ -23,10 +23,10 @@ export interface User {
 }
 
 async function apiTokenAuthMiddleware_(req, res, next) {
-  const apitoken = req.get("apitoken");
+  const apiToken = req.headers["x-api-token"];
   // 没有apitoken的处理，或者长度不对的校验
-  if (isString(apitoken)) {
-    const result = await getUserFromApiToken(req.rpc, apitoken);
+  if (isString(apiToken)) {
+    const result = await getUserFromApiToken(req.rpc, apiToken);
     if (result) {
       const currentRole = result.role;
       req.user = {
@@ -52,11 +52,11 @@ async function apiTokenAuthMiddleware_(req, res, next) {
     } else {
       return res.status(401).json({
         data: null,
-        errors: [{ code: "UNAUTHORISED", message: "invalid apitoken" }]
+        errors: [{ code: "UNAUTHORISED", message: "invalid x-api-token" }],
       });
     }
   }
-  log.info("apitoken:%s, user: %s", apitoken, req.user);
+  log.info("x-api-token:%s, user: %s", apiToken, req.user);
   next();
 }
 

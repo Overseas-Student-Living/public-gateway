@@ -1,6 +1,7 @@
 import {
   Arg,
   Args,
+  Authorized,
   Ctx,
   FieldResolver,
   Query,
@@ -15,10 +16,12 @@ import {
   GetCountriesPayload
 } from "../schemas/country";
 import { isEmpty } from "lodash";
+import { isAuth } from "../../../directives/utils";
 
 @Resolver(Country)
 export class CountryResolver {
   @Query(() => Country)
+  @Authorized(isAuth)
   async getCountry(
     @Arg("id", () => String) id: string,
     @Ctx() context: Context
@@ -38,6 +41,7 @@ export class CountryResolver {
   }
 
   @Query(() => GetCountriesPayload)
+  @Authorized(isAuth)
   async getCountries(
     @Args(() => GetCountriesArgs) args: GetCountriesArgs,
     @Ctx() context: Context

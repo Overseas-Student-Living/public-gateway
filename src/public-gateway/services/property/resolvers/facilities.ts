@@ -1,12 +1,15 @@
 import {
   Arg,
+  Authorized,
   Ctx,
   FieldResolver,
   Mutation,
   Query,
   Resolver,
 } from "type-graphql";
+import { isAuth } from "../../../directives/utils";
 import { Context } from "../../../types/utils";
+import { updatePropertyFacilitiesRule } from "../perm";
 import {
   Facility,
   GetFacilitiesPayload,
@@ -19,14 +22,14 @@ import { groupFacilities } from "../utils";
 @Resolver(Facility)
 export class FacilityResolver {
   @Query(() => GetFacilitiesPayload)
+  @Authorized(isAuth)
   async getFacilities(@Ctx() context: Context) {
     const facilities = await context.rpc.properties.list_facilities();
     return groupFacilities(facilities);
   }
 
   @Mutation(() => UpdatePropertyFacilitiesPayload)
-  // TODO: Refactor access control on resource level
-  //   @Authorized(updatePropertyFacilitiesPerm)
+  @Authorized(updatePropertyFacilitiesRule)
   async updatePropertyFacilities(
     @Arg("input", () => UpdatePropertyFacilitiesInput)
     input: UpdatePropertyFacilitiesInput,

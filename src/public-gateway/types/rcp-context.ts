@@ -44,6 +44,7 @@ interface PropertyService extends ServiceBase {
   update_room: rpcMethod;
   delete_room: rpcMethod;
   list_unit_type_facilities: rpcMethod;
+  _list_active_properties: rpcMethod;
 }
 
 interface PaymentService extends ServiceBase {
