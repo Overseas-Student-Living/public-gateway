@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash";
 
-import { RpcContext } from "../types/rcp-context";
+import { RpcContext } from "../types/rpc-context";
 import { decamelizeKeys } from "humps";
 import { formatPageInfo } from "../utils";
 

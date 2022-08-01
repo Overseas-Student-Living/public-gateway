@@ -7,5 +7,7 @@ export const updatePropertyFacilitiesRule = {
       "d:properties.property_facilities",
     ],
   },
-  object: checkPropertyBelongToLandlord,
+  object: {
+    landlord: checkPropertyBelongToLandlord,
+  },
 };

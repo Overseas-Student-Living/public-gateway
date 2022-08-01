@@ -45,12 +45,20 @@ export function allScopes(context, requireScopes) {
   return true;
 }
 
-export async function checkObjectLevel(context, callbackFn: AuthCallbackFn, args) {
+export async function checkObjectLevel(context, rule, args) {
   const user = context.req.user;
+  const currentRole = user.currentRole;
+  const callbackFn: AuthCallbackFn = rule[currentRole];
   if (!callbackFn) {
-    throw new AuthenticationError("No valid object access permission rule found");
+    throw new AuthenticationError(
+      "No valid object access permission rule found"
+    );
   }
-  const res = await callbackFn(context, user.roleId, args.input ? args.input : args);
+  const res = await callbackFn(
+    context,
+    user.roleId,
+    args.input ? args.input : args
+  );
   if (!res) {
     throw new AuthenticationError("Object access permission deny");
   }
