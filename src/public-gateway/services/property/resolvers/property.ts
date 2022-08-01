@@ -8,7 +8,7 @@ import {
   Resolver,
   FieldResolver,
   Root,
-  Authorized,
+  Authorized
 } from "type-graphql";
 
 import { Context } from "../../../types/utils";
@@ -17,7 +17,7 @@ import {
   createProperty,
   getProperty,
   getProperties,
-  updatePropertyDetail
+  updatePropertyDetail,
 } from "../../../rpc/property";
 import { getCity } from "../../../rpc/location";
 import { BookingJourney } from "../../enum";
@@ -26,6 +26,7 @@ import {
   CreatePropertyPayload,
   GetPropertiesArgs,
   GetPropertiesPayload,
+  GetPropertyPayload,
   Property,
   UpdatePropertyPolicyInput
 } from "../schemas/property";
@@ -37,7 +38,7 @@ import { groupFacilities } from "../utils";
 
 @Resolver(() => Property)
 export class PropertyResolver {
-  @Query(() => Property)
+  @Query(() => GetPropertyPayload)
   @decodeBase64(["id"])
   async getProperty(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
     // 是否需要判断该property是否属于该landlord
@@ -59,7 +60,9 @@ export class PropertyResolver {
       args.country,
       args.apartmentType,
       args.bookingType,
-      args.status
+      args.status,
+      args.pageNumber,
+      args.pageSize
     );
 
     return {
@@ -68,8 +71,8 @@ export class PropertyResolver {
         total: res.numResults,
         totalPages: res.numPages,
         currentPage: args.pageNumber,
-        pageSize: args.pageSize,
-      },
+        pageSize: args.pageSize
+      }
     };
   }
 
@@ -158,7 +161,7 @@ export class PropertyResolver {
   @FieldResolver()
   async facilities(@Root() root: Property, @Ctx() context: Context) {
     const facilities = await context.rpc.properties.list_property_facilities({
-      args: [root.id],
+      args: [root.id]
     });
     return groupFacilities(facilities);
   }

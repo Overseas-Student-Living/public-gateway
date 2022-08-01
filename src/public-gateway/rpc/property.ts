@@ -83,8 +83,43 @@ export const getProperties = async (
       page_size: pageSize
     }
   });
-  console.log("results", results);
   return results;
+};
+
+export const getRooms = async (
+  rpc: RpcContext,
+  propertyId,
+  pageNumber = 1,
+  pageSize = 10
+) => {
+  const filters = [];
+  if (propertyId) {
+    filters.push({ field: "property_id", op: "==", value: propertyId });
+  }
+  const results = await rpc.properties.page_active_unit_types({
+    kwargs: {
+      filters,
+      page_num: pageNumber,
+      page_size: pageSize
+    }
+  });
+  return results;
+};
+
+export const createRoom = async (rpc: RpcContext, data) => {
+  return await rpc.properties.create_room({ args: [decamelizeKeys(data)] });
+};
+
+export const updateRoom = async (rpc: RpcContext, id, data) => {
+  return await rpc.properties.update_room({ args: [id, decamelizeKeys(data)] });
+};
+
+export const deleteRoom = async (rpc: RpcContext, id) => {
+  return await rpc.properties.delete_room({ args: [id] });
+};
+
+export const getRoomfacilities = async (rpc: RpcContext, roomId) => {
+  return await rpc.properties.list_unit_type_facilities({ args: [roomId] });
 };
 
 export const updatePropertyDetail = async (rpc: RpcContext, input) => {

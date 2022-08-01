@@ -79,6 +79,12 @@ export class CreatePropertyPayload {
 }
 
 @ObjectType()
+export class GetPropertyPayload {
+  @Field(() => Property)
+  property: Property[];
+}
+
+@ObjectType()
 export class GetPropertiesPayload {
   @Field(() => PageInfo)
   pageInfo: PageInfo;
