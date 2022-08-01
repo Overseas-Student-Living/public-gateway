@@ -135,7 +135,7 @@ export class TenancyInput {
 
 @InputType()
 export class CreateRateAvailabilityInput {
-  @Directive('@decodeID(type: "Room", required: true)')
+  @Directive('@decodeID(type: "Listing", required: true)')
   @Field(() => ID, { nullable: false })
   roomId: string;
 
@@ -158,7 +158,7 @@ export class CreateRateAvailabilityInput {
 
 @InputType()
 export class UpdateRateAvailabilityInput {
-  @Directive('@decodeID(type: "RateAvailability", required: true)')
+  @Directive('@decodeID(type: "Listing", required: true)')
   @Field(() => ID, { nullable: false })
   id: string;
 
@@ -181,7 +181,7 @@ export class UpdateRateAvailabilityInput {
 
 @InputType()
 export class DeleteRateAvailabilityInput {
-  @Directive('@decodeID(type: "RateAvailability", required: true)')
+  @Directive('@decodeID(type: "Listing", required: true)')
   @Field(() => ID)
   id: string;
 }

@@ -91,8 +91,7 @@ export class RoomResolver {
   @FieldResolver()
   id(@Root() root: Room): any {
     if (root.id) {
-      // Room or UnitType ?
-      return encodeNodeId("Room", root.id);
+      return encodeNodeId("UnitType", root.id);
     }
   }
 
@@ -138,7 +137,7 @@ function formatInput(input) {
   }
 }
 
-function encodeRoomSize(size: String, roomType: String) {
+function encodeRoomSize(size: string, roomType: string) {
   if (!size) {
     return null;
   }

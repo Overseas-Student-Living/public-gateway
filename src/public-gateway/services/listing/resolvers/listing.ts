@@ -115,8 +115,7 @@ export class ListingResolver {
   @FieldResolver()
   id(@Root() root: RateAvailability): any {
     if (root.id) {
-      // Listing or RateAvailability ?
-      return encodeNodeId("RateAvailability", root.id);
+      return encodeNodeId("Listing", root.id);
     }
   }
 
@@ -124,7 +123,7 @@ export class ListingResolver {
   roomId(@Root() root: RateAvailability): any {
     // @ts-ignore
     if (root.unitTypeId) {
-      return encodeNodeId("Room", root.id);
+      return encodeNodeId("UnitType", root.id);
     }
   }
 
@@ -155,6 +154,7 @@ export class ListingResolver {
     tenancy.tenancyLengthType = root.tenancyLengthType;
     // @ts-ignore
     tenancy.tenancyLengthValue = encodeTenancyLengthValue(
+      // @ts-ignore
       root.tenancyLengthValue
     );
     return tenancy;
@@ -222,15 +222,15 @@ function formatInput(input) {
   }
 }
 
-function encodeTenancyLengthValue(tenancyLengthValue: String) {
+function encodeTenancyLengthValue(tenancyLengthValue: string) {
   if (!tenancyLengthValue) {
     return null;
   }
   if (tenancyLengthValue.indexOf("-") > 0) {
     let [from, to] = tenancyLengthValue.split("-");
-    return [from, to];
+    return [parseInt(from), parseInt(to)];
   } else {
-    return [tenancyLengthValue, tenancyLengthValue];
+    return [parseInt(tenancyLengthValue), parseInt(tenancyLengthValue)];
   }
 }
 

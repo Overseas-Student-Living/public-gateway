@@ -214,7 +214,7 @@ export class CreateRoomInput {
 
 @InputType()
 export class UpdateRoomInput {
-  @Directive('@decodeID(type: "Room", required: true)')
+  @Directive('@decodeID(type: "UnitType", required: true)')
   @Field(() => ID, { nullable: false })
   id: string;
   @Field(() => scalar.NonEmptyString)
@@ -262,7 +262,7 @@ export class UpdateRoomInput {
 
 @InputType()
 export class DeleteRoomInput {
-  @Directive('@decodeID(type: "Room", required: true)')
+  @Directive('@decodeID(type: "UnitType", required: true)')
   @Field(() => ID)
   id: string;
 }
