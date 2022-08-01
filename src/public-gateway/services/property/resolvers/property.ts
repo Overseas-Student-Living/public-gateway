@@ -28,7 +28,7 @@ import {
   GetPropertiesPayload,
   GetPropertyPayload,
   Property,
-  UpdatePropertyPolicyInput
+  UpdatePropertyPolicyInput,
 } from "../schemas/property";
 import { landlordFuncPerm } from "../../perm";
 import { decodeBase64 } from "../../../decorators/base64";
@@ -44,7 +44,8 @@ export class PropertyResolver {
   @decodeBase64(["id"])
   async getProperty(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
     // 是否需要判断该property是否属于该landlord
-    return await getProperty(context.rpc, id);
+    const result = await getProperty(context.rpc, id);
+    return { property: result };
   }
 
   @Query(() => GetPropertiesPayload)

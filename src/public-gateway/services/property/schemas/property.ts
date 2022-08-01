@@ -81,7 +81,7 @@ export class CreatePropertyPayload {
 @ObjectType()
 export class GetPropertyPayload {
   @Field(() => Property)
-  property: Property[];
+  property: Property;
 }
 
 @ObjectType()
