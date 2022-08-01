@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { RpcContext } from "./rcp-context";
+import { RpcContext } from "./rpc-context";
 
 export interface GatewayRequest extends Request {
   cache: any;

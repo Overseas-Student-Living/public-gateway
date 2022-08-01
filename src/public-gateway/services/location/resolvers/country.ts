@@ -16,12 +16,11 @@ import {
   GetCountriesPayload
 } from "../schemas/country";
 import { isEmpty } from "lodash";
-import { isAuth } from "../../../directives/utils";
 
 @Resolver(Country)
 export class CountryResolver {
   @Query(() => Country)
-  @Authorized(isAuth)
+  @Authorized()
   async getCountry(
     @Arg("id", () => String) id: string,
     @Ctx() context: Context
@@ -41,7 +40,7 @@ export class CountryResolver {
   }
 
   @Query(() => GetCountriesPayload)
-  @Authorized(isAuth)
+  @Authorized()
   async getCountries(
     @Args(() => GetCountriesArgs) args: GetCountriesArgs,
     @Ctx() context: Context

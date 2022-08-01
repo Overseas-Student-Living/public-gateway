@@ -1,5 +1,5 @@
 export const landlordFuncPerm = {
   func: {
-    roles: ["landlord"]
-  }
+    roles: ["landlord"],
+  },
 };

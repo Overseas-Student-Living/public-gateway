@@ -12,12 +12,11 @@ import { Context } from "../../../types/utils";
 import { decodeNodeIdForType, encodeNodeId } from "../../../utils";
 import { City, GetCitiesArgs, GetCitiesPayload } from "../schemas/city";
 import { isEmpty } from "lodash";
-import { isAuth } from "../../../directives/utils";
 
 @Resolver(City)
 export class CityResolver {
   @Query(() => City)
-  @Authorized(isAuth)
+  @Authorized()
   async getCity(@Arg("id", () => String) id: string, @Ctx() context: Context) {
     const filters = {
       field: "id",
@@ -34,6 +33,7 @@ export class CityResolver {
   }
 
   @Query(() => GetCitiesPayload)
+  @Authorized()
   async getCities(
     @Args(() => GetCitiesArgs) args: GetCitiesArgs,
     @Ctx() context: Context

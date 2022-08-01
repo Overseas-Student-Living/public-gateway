@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash";
 import { decamelizeKeys } from "humps";
-import { RpcContext } from "../types/rcp-context";
+import { RpcContext } from "../types/rpc-context";
 
 export const createProperty = async (rpc: RpcContext, input) => {
   return await rpc.properties.create_property({

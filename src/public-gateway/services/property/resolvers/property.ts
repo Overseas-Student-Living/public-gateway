@@ -35,12 +35,11 @@ import { decodeBase64 } from "../../../decorators/base64";
 import { PropertyTerm } from "../schemas/terms";
 import { listTermsAndConditionsForProperty } from "../../../rpc/payment";
 import { groupFacilities } from "../utils";
-import { isAuth } from "../../../directives/utils";
 
 @Resolver(() => Property)
 export class PropertyResolver {
   @Query(() => GetPropertyPayload)
-  @Authorized(isAuth)
+  @Authorized()
   @decodeBase64(["id"])
   async getProperty(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
     // 是否需要判断该property是否属于该landlord

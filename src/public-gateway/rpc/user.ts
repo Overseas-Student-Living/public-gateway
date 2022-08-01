@@ -1,5 +1,5 @@
 import { getLogger } from "../logger";
-import { RpcContext } from "../types/rcp-context";
+import { RpcContext } from "../types/rpc-context";
 
 const log = getLogger("user_rpc");
 
