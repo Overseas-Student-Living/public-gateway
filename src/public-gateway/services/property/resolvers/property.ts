@@ -92,9 +92,11 @@ export class PropertyResolver {
     input["bookingJourney"] = BookingJourney.MANUAL;
 
     const city = await getCity(context.rpc, input.cityId);
-    input["country"] = city.country.countryCode;
-    input["currency"] = city.country.countryCode;
-    input["billingCycle"] = city.country.billingCycle;
+    if (city) {
+      input["country"] = city.country.countryCode;
+      input["currency"] = city.country.currencyCode;
+      input["billingCycle"] = city.country.billingCycle;
+    }
 
     const property = await createProperty(context.rpc, input);
 
