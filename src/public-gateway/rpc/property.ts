@@ -86,3 +86,13 @@ export const getProperties = async (
   console.log("results", results);
   return results;
 };
+
+export const updatePropertyDetail = async (rpc: RpcContext, input) => {
+  return await rpc.properties.update_property_details({
+    kwargs: {
+      id_: input.propertyId,
+      data: decamelizeKeys(input),
+      draft_check: false
+    }
+  });
+};

@@ -7,10 +7,10 @@ export const asyncMiddleware = middleware => (req, res, next) => {
 export function transFrontendScopesToBackend(frontendScopes: any) {
   // backendScope: {'c:bookings.students': {}, 'r:bookings.students': {} }
   const backendScope = {};
-  frontendScopes.map((frontendScope) => {
+  frontendScopes.map(frontendScope => {
     const obj = frontendScope.object;
     const perms = frontendScope.permission;
-    perms.map((perm) => {
+    perms.map(perm => {
       const name = `${perm.toLowerCase()}:${obj}`;
       backendScope[name] = {};
     });
