@@ -3,6 +3,7 @@ import {
   Args,
   Ctx,
   FieldResolver,
+  ID,
   Mutation,
   Query,
   Resolver,
@@ -12,7 +13,9 @@ import { decodeBase64 } from "../../../decorators/base64";
 import {
   createRoom,
   deleteRoom,
-  getRoomfacilities,
+  getRoom,
+  getRoomBeds,
+  getRoomFacilities,
   getRooms,
   updateRoom
 } from "../../../rpc/property";
@@ -20,11 +23,13 @@ import { Context } from "../../../types/utils";
 import { encodeNodeId } from "../../../utils";
 import { RoomSizeType } from "../enum";
 import {
+  BedSize,
   CreateRoomInput,
   CreateRoomPayload,
   DeleteRoomInput,
   DeleteRoomPayload,
   GetRoomArgs,
+  GetRoomPayload,
   GetRoomsPayload,
   Room,
   RoomSize,
@@ -34,6 +39,14 @@ import {
 
 @Resolver(() => Room)
 export class RoomResolver {
+  // TODO 校验room属于这个landlord
+  @Query(() => GetRoomPayload)
+  @decodeBase64(["id"])
+  async getRoom(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
+    const result = await getRoom(context.rpc, id);
+    return { room: result };
+  }
+
   @Query(() => GetRoomsPayload)
   @decodeBase64(["propertyId"])
   async getRooms(
@@ -56,18 +69,14 @@ export class RoomResolver {
       }
     };
   }
+
   // TODO landlord和property校验
   @Mutation(() => CreateRoomPayload)
   async createRoom(
     @Arg("input", () => CreateRoomInput) input: CreateRoomInput,
     @Ctx() context: Context
   ) {
-    input["categorySlug"] = input.category;
-    input["unitTypeFacilitySlugs"] = input.facilities;
-    input["unitTypeBedSizes"] = input.bedSizes;
-    let size = encodeRoomSize(input.roomSize);
-    input["roomSize"] = size.size;
-    input["roomType"] = size.roomType;
+    formatInput(input);
     const room = await createRoom(context.rpc, input);
     return { room };
   }
@@ -77,17 +86,11 @@ export class RoomResolver {
     @Arg("input", () => UpdateRoomInput) input: UpdateRoomInput,
     @Ctx() context: Context
   ) {
-    input["categorySlug"] = input.category;
-    input["unitTypeFacilitySlugs"] = input.facilities;
-    input["unitTypeBedSizes"] = input.bedSizes;
-    let size = encodeRoomSize(input.roomSize);
-    input["roomSize"] = size.size;
-    input["roomType"] = size.roomType;
+    formatInput(input);
     const room = await updateRoom(context.rpc, input.id, input);
     return { room };
   }
 
-  // TODO 删除应该返回什么
   @Mutation(() => DeleteRoomPayload)
   async deleteRoom(
     @Arg("input", () => DeleteRoomInput) input: DeleteRoomInput,
@@ -100,8 +103,7 @@ export class RoomResolver {
   @FieldResolver()
   id(@Root() root: Room): any {
     if (root.id) {
-      // Room or UnitType ?
-      return encodeNodeId("Room", root.id);
+      return encodeNodeId("UnitType", root.id);
     }
   }
 
@@ -121,29 +123,62 @@ export class RoomResolver {
   @FieldResolver()
   roomSize(@Root() root: Room) {
     // @ts-ignore
-    return decodeRoomSize(root.roomSize, root.roomType);
+    return encodeRoomSize(root.roomSize, root.roomType);
   }
 
   @FieldResolver()
   async facilities(@Root() root: Room, @Ctx() context: Context) {
-    return await getRoomfacilities(context.rpc, root.id);
+    return await getRoomFacilities(context.rpc, root.id);
+  }
+
+  @FieldResolver(() => BedSize)
+  async bedSizes(@Root() root: Room, @Ctx() context: Context) {
+    return encodeBedSize(await getRoomBeds(context.rpc, root.id));
   }
 }
 
-function encodeRoomSize(roomSize: RoomSize) {
-  let size, roomType;
-  if (roomSize.type == RoomSizeType.EXACT) {
-    size = `${roomSize.minimum}`;
-  } else if (roomSize.type == RoomSizeType.MORE_THAN) {
-    size = `${roomSize.minimum}+`;
-  } else {
-    size = `${roomSize.minimum}-${roomSize.maximum}`;
+function formatInput(input:  CreateRoomInput | UpdateRoomInput) {
+  if (input.category) {
+    input["categorySlug"] = input.category;
   }
-  roomType = roomSize.unitOfArea;
-  return { size, roomType };
+  // 这里有问题，如果传空数组，并不会清掉数据
+  if (input.facilities != undefined) {
+    input["unitTypeFacilitySlugs"] = input.facilities;
+  }
+  if (input.bedSizes) {
+    input["unitTypeBedSizes"] = decodeBedSize(input.bedSizes);
+  }
+  if (input.roomSize) {
+    let size = decodeRoomSize(input.roomSize);
+    input["roomSize"] = size.size;
+    input["roomType"] = size.roomType;
+  }
 }
 
-function decodeRoomSize(size: String, roomType: String) {
+function encodeBedSize(bedSize) {
+  return bedSize.map(bed => {
+    return {
+      bedType: bed.type,
+      bedCount: bed.bedCount,
+      lengthInCM: bed.length,
+      widthInCM: bed.width,
+    }
+  })
+}
+
+function decodeBedSize(bedSize: BedSize[]) {
+  return bedSize.map(bed => {
+    return {
+      type: bed.bedType,
+      bedCount: bed.bedCount,
+      length: bed.lengthInCM,
+      width: bed.widthInCM
+    }
+  })
+}
+
+function encodeRoomSize(size: string, roomType: string) {
+
   if (!size) {
     return null;
   }
@@ -161,9 +196,22 @@ function decodeRoomSize(size: String, roomType: String) {
     roomSizeType = RoomSizeType.EXACT;
   }
   return {
-    type: roomSizeType,
+    descriptor: roomSizeType,
     minimum: min,
     maximum: max,
     unitOfArea: roomType
   };
+}
+
+function decodeRoomSize(roomSize: RoomSize) {
+  let size, roomType;
+  if (roomSize.descriptor == RoomSizeType.EXACT) {
+    size = `${roomSize.minimum}`;
+  } else if (roomSize.descriptor == RoomSizeType.MORE_THAN) {
+    size = `${roomSize.minimum}+`;
+  } else {
+    size = `${roomSize.minimum}-${roomSize.maximum}`;
+  }
+  roomType = roomSize.unitOfArea;
+  return { size, roomType };
 }
