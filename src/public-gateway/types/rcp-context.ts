@@ -39,6 +39,18 @@ interface PropertyService extends ServiceBase {
   list_facilities: rpcMethod;
   operate_property_facilities: rpcMethod;
   list_property_facilities: rpcMethod;
+  page_active_unit_types: rpcMethod;
+  create_room: rpcMethod;
+  update_room: rpcMethod;
+  delete_room: rpcMethod;
+  list_unit_type_facilities: rpcMethod;
+  _list_active_properties: rpcMethod;
+}
+
+interface PaymentService extends ServiceBase {
+  create_deposit_terms_and_conditions: rpcMethod;
+  list_deposit_terms_and_conditions: rpcMethod;
+  delete_deposit_terms_and_conditions: rpcMethod;
 }
 
 interface PaymentService extends ServiceBase {

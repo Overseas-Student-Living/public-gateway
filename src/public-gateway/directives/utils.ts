@@ -1,5 +1,5 @@
 import { AuthenticationError } from "apollo-server-express";
-import { intersection } from "lodash";
+import { intersection, isEmpty } from "lodash";
 import { decamelizeKeys } from "humps";
 
 import { getLogger } from "../logger";
@@ -44,6 +44,20 @@ export function allScopes(context, requireScopes) {
   return true;
 }
 
+export async function checkResourceLevel(context, rule, args) {
+  const user = context.req.user;
+  const role = user.currentRole;
+  if (!rule[role]) {
+    throw new AuthenticationError("No valid permission rule found");
+  }
+  const func = rule[role];
+  const res = await func(context, user.roleId, args.input ? args.input : args);
+  if (isEmpty(res)) {
+    throw new AuthenticationError("Permission deny");
+  }
+  return true;
+}
+
 export async function accessControl(input, param, context) {
   /*
     @param: input: User input
@@ -62,6 +76,10 @@ export async function accessControl(input, param, context) {
     //  Use scopes to control table-level permissions
     const requireAllScopes = param.table.scopes;
     allScopes(context, requireAllScopes);
+  }
+
+  if (param.resource) {
+    await checkResourceLevel(context, param.resource, input);
   }
 
   return true;
