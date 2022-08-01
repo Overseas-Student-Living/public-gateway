@@ -16,7 +16,8 @@ import { encodeNodeId } from "../../../utils";
 import {
   createProperty,
   getProperty,
-  getProperties
+  getProperties,
+  updatePropertyDetail,
 } from "../../../rpc/property";
 import { getCity } from "../../../rpc/location";
 import { BookingJourney } from "../../enum";
@@ -26,19 +27,22 @@ import {
   GetPropertiesArgs,
   GetPropertiesPayload,
   GetPropertyPayload,
-  Property
+  Property,
+  UpdatePropertyPolicyInput
 } from "../schemas/property";
 import { landlordFuncPerm } from "../../perm";
 import { decodeBase64 } from "../../../decorators/base64";
+import { PropertyTerm } from "../schemas/terms";
+import { listTermsAndConditionsForProperty } from "../../../rpc/payment";
 import { groupFacilities } from "../utils";
 
 @Resolver(() => Property)
 export class PropertyResolver {
   @Query(() => GetPropertyPayload)
   @decodeBase64(["id"])
-  async property(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
-    const result = await getProperty(context.rpc, id);
-    return { property: result };
+  async getProperty(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
+    // 是否需要判断该property是否属于该landlord
+    return await getProperty(context.rpc, id);
   }
 
   @Query(() => GetPropertiesPayload)
@@ -95,6 +99,16 @@ export class PropertyResolver {
     return { property };
   }
 
+  @Mutation(() => Property)
+  async updatePropertyPolicy(
+    @Arg("input", () => UpdatePropertyPolicyInput, { nullable: false })
+    input: UpdatePropertyPolicyInput,
+    @Ctx() context: Context
+  ) {
+    const result = await updatePropertyDetail(context.rpc, input);
+    return { result };
+  }
+
   @FieldResolver()
   id(@Root() root: Property) {
     if (root.id) {
@@ -115,28 +129,34 @@ export class PropertyResolver {
   }
 
   @FieldResolver()
-  zipCode(@Root() root: Property) {
+  async zipCode(@Root() root: Property) {
     // @ts-ignore
     return root.postalCode;
   }
 
   @FieldResolver()
-  apartmentType(@Root() root: Property) {
+  async apartmentType(@Root() root: Property) {
     // @ts-ignore
     return root.propertyType;
   }
 
   @FieldResolver()
-  rentCycle(@Root() root: Property) {
+  async rentCycle(@Root() root: Property) {
     // @ts-ignore
     return root.billingCycle;
   }
 
   @FieldResolver()
-  bookingType(@Root() root: Property) {
+  async bookingType(@Root() root: Property) {
     // @ts-ignore
     return root.bookingJourney;
   }
+
+  @FieldResolver(() => [PropertyTerm])
+  async propertyTerms(@Root() root: Property, @Ctx() context: Context) {
+    return await listTermsAndConditionsForProperty(context.rpc, root.id);
+  }
+
 
   @FieldResolver()
   async facilities(@Root() root: Property, @Ctx() context: Context) {
