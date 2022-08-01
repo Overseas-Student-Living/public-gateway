@@ -3,11 +3,11 @@ import { Field, InputType, ObjectType } from "type-graphql";
 @InputType()
 export class HelloworldArgs {
   @Field(() => String)
-  name: String;
+  name: string;
 }
 
 @ObjectType()
 export class HelloworldPayload {
   @Field(() => String)
-  content: String;
+  content: string;
 }

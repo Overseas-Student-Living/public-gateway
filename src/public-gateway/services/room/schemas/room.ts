@@ -30,11 +30,11 @@ export class BedSize {
   // @Field(() => Int, { nullable: false })
   // id: number;
   @Field(() => BedType)
-  type: BedType;
+  bedType: BedType;
   @Field(() => Int)
-  length: number;
+  lengthInCM: number;
   @Field(() => Int)
-  width: number;
+  widthInCM: number;
   @Field(() => Int)
   bedCount: number;
 }
@@ -42,7 +42,7 @@ export class BedSize {
 @ObjectType()
 export class RoomSize {
   @Field(() => RoomSizeType)
-  type: RoomSizeType;
+  descriptor: RoomSizeType;
   @Field(() => Int, { nullable: false })
   minimum: number;
   @Field(() => Int)
@@ -89,6 +89,8 @@ export class Room {
   dualOccupancy: DualOccupancy;
   @Field(() => KitchenArrangement)
   kitchenArrangement: KitchenArrangement;
+  @Field(() => scalar.YearMonth)
+  lastFurnished: string;
 
   // 定义一些room.facilities的枚举是不是更好
   @Field(() => [Facility], { nullable: false })
@@ -104,6 +106,12 @@ export class Room {
   bedSizes: BedSize[];
 }
 
+
+@ObjectType()
+export class GetRoomPayload {
+  @Field(() => Room)
+  room: Room;
+}
 @ObjectType()
 export class GetRoomsPayload {
   @Field(() => PageInfo)
@@ -143,11 +151,11 @@ export class DeleteRoomPayload {
 @InputType()
 export class BedSizesInput {
   @Field(() => BedType)
-  type: BedType;
+  bedType: BedType;
   @Field(() => scalar.PositiveInteger)
-  length: number;
+  lengthInCM: number;
   @Field(() => scalar.PositiveInteger)
-  width: number;
+  widthInCM: number;
   @Field(() => scalar.NaturalNumber)
   bedCount: number;
 }
@@ -155,7 +163,7 @@ export class BedSizesInput {
 @InputType()
 export class RoomSizesInput {
   @Field(() => RoomSizeType)
-  type: RoomSizeType;
+  descriptor: RoomSizeType;
   @Field(() => Int, { nullable: false })
   minimum: number;
   @Field(() => Int, { nullable: false })
@@ -214,22 +222,22 @@ export class CreateRoomInput {
 
 @InputType()
 export class UpdateRoomInput {
-  @Directive('@decodeID(type: "Room", required: true)')
+  @Directive('@decodeID(type: "UnitType", required: true)')
   @Field(() => ID, { nullable: false })
   id: string;
   @Field(() => scalar.NonEmptyString)
   name: string;
-  @Field(() => RoomCategory, { nullable: false })
+  @Field(() => RoomCategory)
   category: RoomCategory;
-  @Field(() => scalar.NaturalNumber, { nullable: false })
+  @Field(() => scalar.NaturalNumber)
   bedCount: number;
-  @Field(() => [Int], { nullable: true })
+  @Field(() => [Int])
   floors: number[];
   @Field(() => scalar.NaturalNumber)
   maxOccupancy: number;
   @Field(() => DualOccupancy)
   dualOccupancy: DualOccupancy;
-  @Field(() => BathroomTypeCategory, { nullable: false })
+  @Field(() => BathroomTypeCategory)
   bathroomType: BathroomTypeCategory;
   @Field(() => KitchenArrangement)
   kitchenArrangement: KitchenArrangement;
@@ -251,7 +259,7 @@ export class UpdateRoomInput {
   @Field(() => [String])
   facilities: string[];
 
-  @Field(() => BedSizeType, { nullable: false })
+  @Field(() => BedSizeType)
   bedSizeType: BedSizeType;
   @Field(() => [BedSizesInput])
   bedSizes: BedSizesInput[];
@@ -262,7 +270,7 @@ export class UpdateRoomInput {
 
 @InputType()
 export class DeleteRoomInput {
-  @Directive('@decodeID(type: "Room", required: true)')
+  @Directive('@decodeID(type: "UnitType", required: true)')
   @Field(() => ID)
   id: string;
 }
