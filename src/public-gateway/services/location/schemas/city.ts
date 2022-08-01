@@ -3,17 +3,17 @@ import { PageInfo } from "../../common";
 
 @ObjectType()
 export class City {
-  @Field(() => ID)
+  @Field(() => ID, { nullable: false })
   id: string;
-  @Field(() => String!)
+  @Field(() => String, { nullable: false })
   name: string;
-  @Field(() => ID!)
+  @Field(() => ID, { nullable: false })
   countryId: string;
 }
 
 @ArgsType()
 export class GetCitiesArgs {
-  @Field(() => ID)
+  @Field(() => ID, { nullable: false })
   countryId: string;
   @Field(() => Int)
   pageNumber: number = 1;
