@@ -56,7 +56,6 @@ export class RoomResolver {
       }
     };
   }
-
   // TODO landlord和property校验
   @Mutation(() => CreateRoomPayload)
   async createRoom(
@@ -138,6 +137,7 @@ function formatInput(input) {
 }
 
 function encodeRoomSize(size: string, roomType: string) {
+
   if (!size) {
     return null;
   }

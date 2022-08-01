@@ -13,6 +13,7 @@ const updatePropertyLayerIsOwnParams = [
       {
         field: "id",
         op: "in",
+
         value: "$roleData.propertyIds",
       },
     ],

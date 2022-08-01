@@ -121,3 +121,13 @@ export const deleteRoom = async (rpc: RpcContext, id) => {
 export const getRoomfacilities = async (rpc: RpcContext, roomId) => {
   return await rpc.properties.list_unit_type_facilities({ args: [roomId] });
 };
+
+export const updatePropertyDetail = async (rpc: RpcContext, input) => {
+  return await rpc.properties.update_property_details({
+    kwargs: {
+      id_: input.propertyId,
+      data: decamelizeKeys(input),
+      draft_check: false
+    }
+  });
+};

@@ -3,6 +3,7 @@ export interface RpcContext {
   locations: LocationService;
   properties: PropertyService;
   listings: ListingService;
+  payments: PaymentService;
 }
 
 interface RpcPayload {
@@ -35,6 +36,7 @@ interface PropertyService extends ServiceBase {
   create_property: rpcMethod;
   list_active_properties: rpcMethod;
   page_active_properties: rpcMethod;
+  update_property_details: rpcMethod;
   list_facilities: rpcMethod;
   operate_property_facilities: rpcMethod;
   list_property_facilities: rpcMethod;
@@ -51,4 +53,10 @@ interface ListingService extends ServiceBase {
   delete_listing: rpcMethod;
   list_listings: rpcMethod;
   count_listings: rpcMethod;
+}
+
+interface PaymentService extends ServiceBase {
+  create_deposit_terms_and_conditions: rpcMethod;
+  list_deposit_terms_and_conditions: rpcMethod;
+  delete_deposit_terms_and_conditions: rpcMethod;
 }
