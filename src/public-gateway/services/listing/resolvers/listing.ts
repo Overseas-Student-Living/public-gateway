@@ -128,13 +128,13 @@ export class ListingResolver {
   }
 
   @FieldResolver()
-  bookableTo(@Root() root: RateAvailability): any {
+  bookableFrom(@Root() root: RateAvailability): any {
     // @ts-ignore
     return datetimeStrToDateStr(root.liveOn);
   }
 
   @FieldResolver()
-  bookableFrom(@Root() root: RateAvailability): any {
+  bookableTo(@Root() root: RateAvailability): any {
     // @ts-ignore
     return datetimeStrToDateStr(root.liveUntil);
   }
