@@ -86,6 +86,18 @@ export const getProperties = async (
   return results;
 };
 
+export const getRoom = async (rpc: RpcContext, id) => {
+  const result = await rpc.properties.list_active_unit_types({
+    kwargs: {
+      filters: [{ field: "id", op: "in", value: [id] }]
+    }
+  });
+  if (!isEmpty(result)) {
+    return result[0];
+  }
+  return null;
+};
+
 export const getRooms = async (
   rpc: RpcContext,
   propertyId,
@@ -118,9 +130,13 @@ export const deleteRoom = async (rpc: RpcContext, id) => {
   return await rpc.properties.delete_room({ args: [id] });
 };
 
-export const getRoomfacilities = async (rpc: RpcContext, roomId) => {
+export const getRoomFacilities = async (rpc: RpcContext, roomId) => {
   return await rpc.properties.list_unit_type_facilities({ args: [roomId] });
 };
+
+export const getRoomBeds = async (rpc: RpcContext, roomId) => {
+  return await rpc.properties.list_bed_sizes_for_unit_type({ args: [roomId] });
+}
 
 export const updatePropertyDetail = async (rpc: RpcContext, input) => {
   return await rpc.properties.update_property_details({
