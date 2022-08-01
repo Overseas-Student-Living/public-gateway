@@ -4,7 +4,7 @@ import {
   FieldResolver,
   Mutation,
   Query,
-  Resolver
+  Resolver,
 } from "type-graphql";
 import { Context } from "../../../types/utils";
 import {
@@ -35,8 +35,8 @@ export class FacilityResolver {
     const success = await context.rpc.properties.operate_property_facilities({
       kwargs: {
         property_id: input.propertyId,
-        facility_slugs: input.facilitySlugs
-      }
+        facility_slugs: input.facilitySlugs,
+      },
     });
     return { success };
   }

@@ -26,23 +26,23 @@ export enum ApartmentType {
   TERRACE = "terrace",
   VILLA = "villa",
   SERVICED_APARTMENT = "serviced-apartment",
-  DUPLEX = "duplex"
+  DUPLEX = "duplex",
 }
 
 registerEnumType(ApartmentType, {
   name: "ApartmentType",
-  description: "ApartmentType"
+  description: "ApartmentType",
 });
 
 export enum PropertyStatus {
   NEW = "new",
   EDITING = "editing",
   PUBLISHED = "published",
-  UNPUBLISHED = "unpublished"
+  UNPUBLISHED = "unpublished",
 }
 
 registerEnumType(PropertyStatus, {
-  name: "PropertyStatus"
+  name: "PropertyStatus",
 });
 
 export enum PropertyTermStatus {
@@ -83,5 +83,6 @@ export enum FacilityType {
   PROPERTY = "property",
   UNIT_TYPE = "unit_type"
 }
+
 
 registerEnumType(FacilityType, { name: "FacilityType" });

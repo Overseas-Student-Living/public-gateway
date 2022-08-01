@@ -8,13 +8,13 @@ describe("test group facilities", () => {
       { slug: "facility 3", tags: ["security"] },
       { slug: "facility 4", tags: ["rule"] },
       { slug: "facility 5", tags: [] },
-      { slug: "facility 6", tags: null }
+      { slug: "facility 6", tags: null },
     ];
     const expected_result = {
       features: [{ slug: "facility 1", tags: ["amenity"] }],
       bills: [{ slug: "facility 2", tags: ["bills"] }],
       securityAndSafety: [{ slug: "facility 3", tags: ["security"] }],
-      propertyRules: [{ slug: "facility 4", tags: ["rule"] }]
+      propertyRules: [{ slug: "facility 4", tags: ["rule"] }],
     };
     const res = groupFacilities(facilities);
     expect(res).toEqual(expected_result);

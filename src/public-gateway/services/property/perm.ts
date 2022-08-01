@@ -8,14 +8,15 @@ const updatePropertyLayerIsOwnParams = [
       {
         field: "id",
         op: "==",
-        value: "$propertyId"
+        value: "$propertyId",
       },
       {
         field: "id",
         op: "in",
-        value: "$roleData.propertyIds"
-      }
-    ]
+
+        value: "$roleData.propertyIds",
+      },
+    ],
   },
   {
     level: "landlord",
@@ -25,25 +26,25 @@ const updatePropertyLayerIsOwnParams = [
       {
         field: "id",
         op: "==",
-        value: "$propertyId"
+        value: "$propertyId",
       },
       {
         field: "landlord_id",
         op: "in",
-        value: "$roleData.landlordIds"
-      }
-    ]
-  }
+        value: "$roleData.landlordIds",
+      },
+    ],
+  },
 ];
 
 export const updatePropertyFacilitiesPerm = {
   table: {
     scopes: [
       "c:properties.property_facilities",
-      "d:properties.property_facilities"
-    ]
+      "d:properties.property_facilities",
+    ],
   },
   own: {
-    landlord: updatePropertyLayerIsOwnParams
-  }
+    landlord: updatePropertyLayerIsOwnParams,
+  },
 };

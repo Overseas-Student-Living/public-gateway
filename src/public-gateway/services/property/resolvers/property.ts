@@ -8,7 +8,7 @@ import {
   Resolver,
   FieldResolver,
   Root,
-  Authorized
+  Authorized,
 } from "type-graphql";
 
 import { Context } from "../../../types/utils";
@@ -68,8 +68,8 @@ export class PropertyResolver {
         total: res.numResults,
         totalPages: res.numPages,
         currentPage: args.pageNumber,
-        pageSize: args.pageSize
-      }
+        pageSize: args.pageSize,
+      },
     };
   }
 
@@ -154,10 +154,11 @@ export class PropertyResolver {
     return await listTermsAndConditionsForProperty(context.rpc, root.id);
   }
 
+
   @FieldResolver()
   async facilities(@Root() root: Property, @Ctx() context: Context) {
     const facilities = await context.rpc.properties.list_property_facilities({
-      args: [root.id]
+      args: [root.id],
     });
     return groupFacilities(facilities);
   }
