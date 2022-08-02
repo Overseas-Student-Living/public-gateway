@@ -22,6 +22,6 @@ export const decimalResolvers = {
 
     parseValue(value) {
       return new Decimal(value);
-    }
-  })
+    },
+  }),
 };

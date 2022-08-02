@@ -10,7 +10,7 @@ export const createListing = async (rpc: RpcContext, data) => {
 
 export const updateListing = async (rpc: RpcContext, id, data) => {
   return await rpc.listings.update_listing({
-    args: [id, decamelizeKeys(data)]
+    args: [id, decamelizeKeys(data)],
   });
 };
 
@@ -21,8 +21,8 @@ export const deleteListing = async (rpc: RpcContext, id) => {
 export const getListing = async (rpc: RpcContext, id) => {
   const result = await rpc.listings.list_listings({
     kwargs: {
-      filters: [{ field: "id", op: "in", value: [id] }]
-    }
+      filters: [{ field: "id", op: "in", value: [id] }],
+    },
   });
   if (!isEmpty(result)) {
     return result[0];
@@ -44,13 +44,13 @@ export const getListings = async (
     kwargs: {
       filters,
       offset: (pageNumber - 1) * pageSize,
-      limit: pageSize
-    }
+      limit: pageSize,
+    },
   });
   const total = await rpc.listings.count_listings({
     kwargs: {
-      filters
-    }
+      filters,
+    },
   });
   return formatPageInfo(results, total, pageNumber, pageSize);
 };

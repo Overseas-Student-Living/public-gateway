@@ -6,7 +6,7 @@ import {
   Query,
   Resolver,
   UseMiddleware,
-  Authorized
+  Authorized,
 } from "type-graphql";
 import { isAuth } from "../../../decorators/authentication";
 import { getLogger } from "../../../logger";

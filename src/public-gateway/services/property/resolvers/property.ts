@@ -8,18 +8,16 @@ import {
   Resolver,
   FieldResolver,
   Root,
-  Authorized
+  Authorized,
 } from "type-graphql";
 
 import { Context } from "../../../types/utils";
 import { encodeNodeId } from "../../../utils";
-import {
-  createProperty,
-  getProperty,
-  getProperties,
-  updatePropertyDetail,
-} from "../../../rpc/property";
-import { getCity } from "../../../rpc/location";
+
+import propertyRpc = require("../../../rpc/property");
+import paymentRpc = require("../../../rpc/payment");
+import locationRpc = require("../../../rpc/location");
+
 import { BookingJourney } from "../../enum";
 import {
   CreatePropertyInput,
@@ -28,33 +26,35 @@ import {
   GetPropertiesPayload,
   GetPropertyPayload,
   Property,
+  UpdatePropertyPayload,
   UpdatePropertyPolicyInput,
 } from "../schemas/property";
-import { landlordFuncPerm } from "../../perm";
 import { decodeBase64 } from "../../../decorators/base64";
 import { PropertyTerm } from "../schemas/terms";
-import { listTermsAndConditionsForProperty } from "../../../rpc/payment";
 import { groupFacilities } from "../utils";
+import { getPropertyRule, updatePropertyRule } from "../perm";
 
 @Resolver(() => Property)
 export class PropertyResolver {
   @Query(() => GetPropertyPayload)
-  @Authorized()
+  @Authorized(getPropertyRule)
   @decodeBase64(["id"])
-  async getProperty(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
-    // 是否需要判断该property是否属于该landlord
-    const result = await getProperty(context.rpc, id);
+  async getProperty(
+    @Arg("id", () => ID, { nullable: false }) id: string,
+    @Ctx() context: Context
+  ) {
+    const result = await propertyRpc.getProperty(context.rpc, id);
     return { property: result };
   }
 
   @Query(() => GetPropertiesPayload)
-  @Authorized(landlordFuncPerm)
+  @Authorized()
   @decodeBase64(["cityId"])
   async getProperties(
     @Args(() => GetPropertiesArgs) args: GetPropertiesArgs,
     @Ctx() context: Context
   ) {
-    const res = await getProperties(
+    const res = await propertyRpc.getProperties(
       context.rpc,
       args.name,
       context.req.user.roleId,
@@ -73,13 +73,13 @@ export class PropertyResolver {
         total: res.numResults,
         totalPages: res.numPages,
         currentPage: args.pageNumber,
-        pageSize: args.pageSize
-      }
+        pageSize: args.pageSize,
+      },
     };
   }
 
   @Mutation(() => CreatePropertyPayload)
-  @Authorized(landlordFuncPerm)
+  @Authorized()
   async createProperty(
     @Arg("input", () => CreatePropertyInput, { nullable: false })
     input: CreatePropertyInput,
@@ -91,26 +91,27 @@ export class PropertyResolver {
     input["accountManager"] = context.req.user.email;
     input["bookingJourney"] = BookingJourney.MANUAL;
 
-    const city = await getCity(context.rpc, input.cityId);
+    const city = await locationRpc.getCity(context.rpc, input.cityId);
     if (city) {
       input["country"] = city.country.countryCode;
       input["currency"] = city.country.currencyCode;
       input["billingCycle"] = city.country.billingCycle;
     }
 
-    const property = await createProperty(context.rpc, input);
+    const property = await propertyRpc.createProperty(context.rpc, input);
 
     return { property };
   }
 
-  @Mutation(() => Property)
+  @Mutation(() => UpdatePropertyPayload)
+  @Authorized(updatePropertyRule)
   async updatePropertyPolicy(
     @Arg("input", () => UpdatePropertyPolicyInput, { nullable: false })
     input: UpdatePropertyPolicyInput,
     @Ctx() context: Context
   ) {
-    const result = await updatePropertyDetail(context.rpc, input);
-    return { result };
+    const property = await propertyRpc.updatePropertyDetail(context.rpc, input);
+    return { property };
   }
 
   @FieldResolver()
@@ -158,14 +159,16 @@ export class PropertyResolver {
 
   @FieldResolver(() => [PropertyTerm])
   async propertyTerms(@Root() root: Property, @Ctx() context: Context) {
-    return await listTermsAndConditionsForProperty(context.rpc, root.id);
+    return await paymentRpc.listTermsAndConditionsForProperty(
+      context.rpc,
+      root.id
+    );
   }
-
 
   @FieldResolver()
   async facilities(@Root() root: Property, @Ctx() context: Context) {
     const facilities = await context.rpc.properties.list_property_facilities({
-      args: [root.id]
+      args: [root.id],
     });
     return groupFacilities(facilities);
   }

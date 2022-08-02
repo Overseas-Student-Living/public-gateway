@@ -14,7 +14,7 @@ export function groupFacilities(facilities) {
     propertyRules: [],
   };
   if (!isEmpty(facilities)) {
-    facilities.forEach((item) => {
+    facilities.forEach(item => {
       if (item.tags && !isEmpty(item.tags)) {
         const category = tagToCategory[item.tags[0]];
         if (category) {

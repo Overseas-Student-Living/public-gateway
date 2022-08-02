@@ -9,5 +9,5 @@ export const typeResolvers = [
   ...LocationResolvers,
   ...PropertyResolvers,
   ...RoomResolvers,
-  ...ListingResolvers
+  ...ListingResolvers,
 ];

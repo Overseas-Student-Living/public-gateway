@@ -14,7 +14,7 @@ import {
   GetFacilitiesPayload,
   PropertyFacility,
   UpdatePropertyFacilitiesInput,
-  UpdatePropertyFacilitiesPayload
+  UpdatePropertyFacilitiesPayload,
 } from "../schemas/facilities";
 import { groupFacilities } from "../utils";
 

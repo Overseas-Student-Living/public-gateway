@@ -38,7 +38,7 @@ export class AWSS3 {
       region: config.region || process.env.AWS_S3_REGION,
       accessKeyId: config.accessKeyId || process.env.AWS_S3_ACCESS_KEY_ID,
       secretAccessKey:
-        config.secretAccessKey || process.env.AWS_S3_SECRET_ACCESS_KEY
+        config.secretAccessKey || process.env.AWS_S3_SECRET_ACCESS_KEY,
     });
     this.filenameTransform = config.filenameTransform || uuidFilenameTransform;
     this.s3 = new awsSdk.S3();
@@ -58,7 +58,7 @@ export class AWSS3 {
         Bucket: this.config.destinationBucketName,
         Body: readStream,
         Key: `${this.folder}/${transformedFilename}`,
-        ContentType: mimetype
+        ContentType: mimetype,
       })
       .promise();
   }
@@ -66,14 +66,14 @@ export class AWSS3 {
   public async download(fileKey) {
     const options = {
       Bucket: this.config.destinationBucketName,
-      Key: `${this.folder}/${fileKey}`
+      Key: `${this.folder}/${fileKey}`,
     };
     const s3stream = this.s3.getObject(options).createReadStream();
 
     s3stream.on("error", function error(err) {
       return {
         success: false,
-        error: err
+        error: err,
       };
     });
     return s3stream;

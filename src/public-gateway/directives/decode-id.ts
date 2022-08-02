@@ -4,7 +4,7 @@ import {
   GraphQLScalarType,
   isWrappingType,
   isNamedType,
-  GraphQLNonNull
+  GraphQLNonNull,
 } from "graphql";
 import { decodeNodeIdForType } from "../utils";
 
@@ -38,7 +38,7 @@ class DecodedIdType extends GraphQLScalarType {
       },
       parseValue(value) {
         return decodeNodeIdForType(value, idType);
-      }
+      },
     });
   }
 }

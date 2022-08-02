@@ -7,7 +7,7 @@ describe("parseLiteral datetime", () => {
     const result = resolver.parseLiteral(
       {
         kind: "StringValue",
-        value: "2017-01-01"
+        value: "2017-01-01",
       },
       {}
     );
@@ -18,7 +18,7 @@ describe("parseLiteral datetime", () => {
     const result = resolver.parseLiteral(
       {
         kind: "StringValue",
-        value: "2017-08-31"
+        value: "2017-08-31",
       },
       {}
     );
@@ -29,7 +29,7 @@ describe("parseLiteral datetime", () => {
     const result = resolver.parseLiteral(
       {
         kind: "StringValue",
-        value: "2017-08-31 23:59:59"
+        value: "2017-08-31 23:59:59",
       },
       {}
     );
@@ -40,7 +40,7 @@ describe("parseLiteral datetime", () => {
     const result = resolver.parseLiteral(
       {
         kind: "StringValue",
-        value: "2017-08-31T23:59:59"
+        value: "2017-08-31T23:59:59",
       },
       {}
     );
@@ -51,7 +51,7 @@ describe("parseLiteral datetime", () => {
     const result = resolver.parseLiteral(
       {
         kind: "StringValue",
-        value: "2017-08-31T23:59:59+00:00"
+        value: "2017-08-31T23:59:59+00:00",
       },
       {}
     );
@@ -62,7 +62,7 @@ describe("parseLiteral datetime", () => {
     const result = resolver.parseLiteral(
       {
         kind: "StringValue",
-        value: "2017-08-31T23:59:59+22:00"
+        value: "2017-08-31T23:59:59+22:00",
       },
       {}
     );
@@ -75,7 +75,7 @@ describe("serialize datetime", () => {
     const value = resolver.parseLiteral(
       {
         kind: "StringValue",
-        value: "2017-08-31"
+        value: "2017-08-31",
       },
       {}
     );
@@ -87,7 +87,7 @@ describe("serialize datetime", () => {
     const value = resolver.parseLiteral(
       {
         kind: "StringValue",
-        value: "2017-08-31T23:59:59+22:00"
+        value: "2017-08-31T23:59:59+22:00",
       },
       {}
     );

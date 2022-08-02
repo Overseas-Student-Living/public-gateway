@@ -21,7 +21,7 @@ describe("resolvers PositiveInteger", () => {
       const result = resolver.parseLiteral(
         {
           kind: "StringValue",
-          value: "1"
+          value: "1",
         },
         {}
       );
@@ -33,7 +33,7 @@ describe("resolvers PositiveInteger", () => {
         resolver.parseLiteral(
           {
             kind: "StringValue",
-            value: "0"
+            value: "0",
           },
           {}
         );
@@ -46,7 +46,7 @@ describe("resolvers PositiveInteger", () => {
       const value = resolver.parseLiteral(
         {
           kind: "StringValue",
-          value: "1"
+          value: "1",
         },
         {}
       );

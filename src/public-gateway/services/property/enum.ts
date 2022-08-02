@@ -48,11 +48,11 @@ registerEnumType(PropertyStatus, {
 export enum PropertyTermStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
-  EXPIRED = "expired"
+  EXPIRED = "expired",
 }
 
 registerEnumType(PropertyTermStatus, {
-  name: "PropertyTermStatus"
+  name: "PropertyTermStatus",
 });
 
 export enum FreeCancellationPeriod {
@@ -72,17 +72,16 @@ export enum FreeCancellationPeriod {
   UNTIL_CHECK_IN_DAY = "until_check_in_day",
   UNTIL_THE_STUDENT_PAYS_FOR_THE_RENT = "until_the_student_pays_for_the_rent",
   NO_COOLING_OFF_PERIOD = "no_cooling_off_period",
-  OTHER = "other"
+  OTHER = "other",
 }
 
 registerEnumType(FreeCancellationPeriod, {
-  name: "FreeCancellationPeriod"
+  name: "FreeCancellationPeriod",
 });
 
 export enum FacilityType {
   PROPERTY = "property",
-  UNIT_TYPE = "unit_type"
+  UNIT_TYPE = "unit_type",
 }
-
 
 registerEnumType(FacilityType, { name: "FacilityType" });

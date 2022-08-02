@@ -26,7 +26,7 @@ export const kinopio = new Kinopio("public-gateway", {
   // onRequest: (svcName, functionName, payload) => {
   // },
   processResponse: response => camelizeKeys(response),
-  queuePrefix: "rpc.reply-public-gateway"
+  queuePrefix: "rpc.reply-public-gateway",
 });
 
 acceptLanguage.languages(LOCALES);
@@ -43,7 +43,7 @@ export function namekoRpcContextMiddleware(
   callIdStack.push(req.callId);
 
   const workerCtx: any = {
-    "nameko.call_id_stack": callIdStack
+    "nameko.call_id_stack": callIdStack,
   };
 
   // 是否需要根据req.user信息，构建一个jwttoken，放到authorization里，因为property会解析该上下文去取对应的property

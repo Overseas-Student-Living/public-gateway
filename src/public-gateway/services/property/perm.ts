@@ -1,4 +1,16 @@
-import { checkPropertyBelongToLandlord } from "../rules";
+import { checkLandlordCanOperateProperty } from "../rules";
+
+export const getPropertyRule = {
+  object: {
+    landlord: checkLandlordCanOperateProperty,
+  },
+};
+
+export const updatePropertyRule = {
+  object: {
+    landlord: checkLandlordCanOperateProperty,
+  },
+};
 
 export const updatePropertyFacilitiesRule = {
   table: {
@@ -8,6 +20,6 @@ export const updatePropertyFacilitiesRule = {
     ],
   },
   object: {
-    landlord: checkPropertyBelongToLandlord,
+    landlord: checkLandlordCanOperateProperty,
   },
 };

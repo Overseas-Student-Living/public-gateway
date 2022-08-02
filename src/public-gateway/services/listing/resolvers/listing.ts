@@ -3,25 +3,27 @@ import * as moment from "moment";
 import {
   Arg,
   Args,
+  Authorized,
   Ctx,
   FieldResolver,
   ID,
   Mutation,
   Query,
   Resolver,
-  Root
+  Root,
 } from "type-graphql";
+import listingRpc = require("../../../rpc/listing");
 import { decodeBase64 } from "../../../decorators/base64";
-import {
-  createListing,
-  deleteListing,
-  getListing,
-  getListings,
-  updateListing
-} from "../../../rpc/listing";
 import { Context } from "../../../types/utils";
 import { encodeNodeId } from "../../../utils";
 import { ListingType, TenancyLengthType } from "../enum";
+import {
+  createListingRule,
+  deleteListingRule,
+  getListingRule,
+  getListingsRule,
+  updateListingRule,
+} from "../perm";
 import {
   CreateRateAvailabilityInput,
   CreateRateAvailabilityPayload,
@@ -34,29 +36,30 @@ import {
   RateAvailability,
   Tenancy,
   UpdateRateAvailabilityInput,
-  UpdateRateAvailabilityPayload
+  UpdateRateAvailabilityPayload,
 } from "../schemas/listing";
 
-// TODO 权限
 @Resolver(() => RateAvailability)
 export class ListingResolver {
   @Query(() => GetRateAvailabilityPayload)
   @decodeBase64(["id"])
+  @Authorized(getListingRule)
   async getRateAvailability(
-    @Arg("id", () => ID) id: string,
+    @Arg("id", () => ID, { nullable: false }) id: string,
     @Ctx() context: Context
   ) {
-    const result = await getListing(context.rpc, id);
+    const result = await listingRpc.getListing(context.rpc, id);
     return { rateAvailability: result };
   }
 
   @Query(() => GetRateAvailabilitiesPayload)
   @decodeBase64(["roomId"])
+  @Authorized(getListingsRule)
   async getRateAvailabilities(
     @Args(() => GetRateAvailabilityArgs) args: GetRateAvailabilityArgs,
     @Ctx() context: Context
   ) {
-    const res = await getListings(
+    const res = await listingRpc.getListings(
       context.rpc,
       args.roomId,
       args.pageNumber,
@@ -68,14 +71,15 @@ export class ListingResolver {
         total: res.numResults,
         totalPages: res.numPages,
         currentPage: args.pageNumber,
-        pageSize: args.pageSize
-      }
+        pageSize: args.pageSize,
+      },
     };
   }
 
   @Mutation(() => CreateRateAvailabilityPayload)
+  @Authorized(createListingRule)
   async createRateAvailability(
-    @Arg("input", () => CreateRateAvailabilityInput)
+    @Arg("input", () => CreateRateAvailabilityInput, { nullable: false })
     input: CreateRateAvailabilityInput,
     @Ctx() context: Context
   ) {
@@ -85,30 +89,36 @@ export class ListingResolver {
 
     formatInput(input);
 
-    const listing = await createListing(context.rpc, input);
+    const listing = await listingRpc.createListing(context.rpc, input);
     return { rateAvailability: listing };
   }
 
   @Mutation(() => UpdateRateAvailabilityPayload)
+  @Authorized(updateListingRule)
   async updateRateAvailability(
-    @Arg("input", () => UpdateRateAvailabilityInput)
+    @Arg("input", () => UpdateRateAvailabilityInput, { nullable: false })
     input: UpdateRateAvailabilityInput,
     @Ctx() context: Context
   ) {
     formatInput(input);
 
     // TODO 业务上的校验
-    const listing = await updateListing(context.rpc, input.id, input);
+    const listing = await listingRpc.updateListing(
+      context.rpc,
+      input.id,
+      input
+    );
     return { rateAvailability: listing };
   }
 
   @Mutation(() => DeleteRateAvailabilityPayload)
+  @Authorized(deleteListingRule)
   async deleteRateAvailability(
-    @Arg("input", () => DeleteRateAvailabilityInput)
+    @Arg("input", () => DeleteRateAvailabilityInput, { nullable: false })
     input: DeleteRateAvailabilityInput,
     @Ctx() context: Context
   ) {
-    await deleteListing(context.rpc, input.id);
+    await listingRpc.deleteListing(context.rpc, input.id);
     return { result: true };
   }
 
@@ -122,8 +132,9 @@ export class ListingResolver {
   @FieldResolver()
   roomId(@Root() root: RateAvailability): any {
     // @ts-ignore
-    if (root.unitTypeId) {
-      return encodeNodeId("UnitType", root.id);
+    const unitTypeId = root.unitTypeId;
+    if (unitTypeId) {
+      return encodeNodeId("UnitType", unitTypeId);
     }
   }
 
@@ -196,11 +207,9 @@ function formatInput(input) {
       );
       input["tenancyLengthType"] = input.tenancy.tenancyLengthType;
     }
-
     if (input.tenancy.moveInType) {
       input["moveInType"] = input.tenancy.moveInType;
     }
-
     if (input.tenancy.moveOutType) {
       input["moveOutType"] = input.tenancy.moveOutType;
     }

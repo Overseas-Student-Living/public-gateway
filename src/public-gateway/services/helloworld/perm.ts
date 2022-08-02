@@ -1,14 +1,14 @@
 export const studentFuncPerm = {
   func: {
-    roles: ["student"]
-  }
+    roles: ["student"],
+  },
 };
 
 export const landlordFuncPerm = {
   func: {
-    roles: ["landlord"]
+    roles: ["landlord"],
   },
   table: {
-    scopes: ["c:landlord.landlords"]
-  }
+    scopes: ["c:landlord.landlords"],
+  },
 };

@@ -1,59 +1,63 @@
 import {
   Arg,
   Args,
+  Authorized,
   Ctx,
   FieldResolver,
   ID,
   Mutation,
   Query,
   Resolver,
-  Root
+  Root,
 } from "type-graphql";
-import { decodeBase64 } from "../../../decorators/base64";
-import {
-  createRoom,
-  deleteRoom,
-  getRoom,
-  getRoomBeds,
-  getRoomFacilities,
-  getRooms,
-  updateRoom
-} from "../../../rpc/property";
+import propertyRpc = require("../../../rpc/property");
 import { Context } from "../../../types/utils";
 import { encodeNodeId } from "../../../utils";
 import { RoomSizeType } from "../enum";
+import { decodeBase64 } from "../../../decorators/base64";
+import {
+  createRoomRule,
+  deleteRoomRule,
+  getRoomRule,
+  getRoomsRule,
+  updateRoomRule,
+} from "../perm";
 import {
   BedSize,
   CreateRoomInput,
   CreateRoomPayload,
   DeleteRoomInput,
   DeleteRoomPayload,
-  GetRoomArgs,
+  GetRoomsArgs,
   GetRoomPayload,
   GetRoomsPayload,
   Room,
   RoomSize,
   UpdateRoomInput,
-  UpdateRoomPayload
+  UpdateRoomPayload,
 } from "../schemas/room";
 
 @Resolver(() => Room)
 export class RoomResolver {
-  // TODO 校验room属于这个landlord
   @Query(() => GetRoomPayload)
   @decodeBase64(["id"])
-  async getRoom(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
-    const result = await getRoom(context.rpc, id);
+  @Authorized(getRoomRule)
+  async getRoom(
+    @Arg("id", () => ID, { nullable: false }) id: string,
+    @Ctx() context: Context
+  ) {
+    const result = await propertyRpc.getRoom(context.rpc, id);
     return { room: result };
   }
 
   @Query(() => GetRoomsPayload)
   @decodeBase64(["propertyId"])
+  @Authorized(getRoomsRule)
   async getRooms(
-    @Args(() => GetRoomArgs) args: GetRoomArgs,
+    @Args(() => GetRoomsArgs) args: GetRoomsArgs,
     @Ctx() context: Context
   ) {
-    const res = await getRooms(
+    const res = await propertyRpc.getRooms(
       context.rpc,
       args.propertyId,
       args.pageNumber,
@@ -65,79 +69,81 @@ export class RoomResolver {
         total: res.numResults,
         totalPages: res.numPages,
         currentPage: args.pageNumber,
-        pageSize: args.pageSize
-      }
+        pageSize: args.pageSize,
+      },
     };
   }
 
-  // TODO landlord和property校验
   @Mutation(() => CreateRoomPayload)
+  @Authorized(createRoomRule)
   async createRoom(
     @Arg("input", () => CreateRoomInput) input: CreateRoomInput,
     @Ctx() context: Context
   ) {
     formatInput(input);
-    const room = await createRoom(context.rpc, input);
+    const room = await propertyRpc.createRoom(context.rpc, input);
     return { room };
   }
 
   @Mutation(() => UpdateRoomPayload)
+  @Authorized(updateRoomRule)
   async updateRoom(
     @Arg("input", () => UpdateRoomInput) input: UpdateRoomInput,
     @Ctx() context: Context
   ) {
     formatInput(input);
-    const room = await updateRoom(context.rpc, input.id, input);
+    const room = await propertyRpc.updateRoom(context.rpc, input.id, input);
     return { room };
   }
 
   @Mutation(() => DeleteRoomPayload)
+  @Authorized(deleteRoomRule)
   async deleteRoom(
     @Arg("input", () => DeleteRoomInput) input: DeleteRoomInput,
     @Ctx() context: Context
   ) {
-    await deleteRoom(context.rpc, input.id);
+    await propertyRpc.deleteRoom(context.rpc, input.id);
     return { result: true };
   }
 
   @FieldResolver()
-  id(@Root() root: Room): any {
+  async id(@Root() root: Room) {
     if (root.id) {
       return encodeNodeId("UnitType", root.id);
     }
   }
 
   @FieldResolver()
-  category(@Root() root: Room) {
+  async category(@Root() root: Room) {
     // @ts-ignore
     return root.categorySlug;
   }
 
   @FieldResolver()
-  propertyId(@Root() root: Room) {
-    if (root.id) {
+  async propertyId(@Root() root: Room) {
+    if (root.propertyId) {
       return encodeNodeId("Property", root.propertyId);
     }
   }
 
   @FieldResolver()
-  roomSize(@Root() root: Room) {
+  async roomSize(@Root() root: Room) {
     // @ts-ignore
     return encodeRoomSize(root.roomSize, root.roomType);
   }
 
   @FieldResolver()
   async facilities(@Root() root: Room, @Ctx() context: Context) {
-    return await getRoomFacilities(context.rpc, root.id);
+    return await propertyRpc.getRoomFacilities(context.rpc, root.id);
   }
 
   @FieldResolver(() => BedSize)
   async bedSizes(@Root() root: Room, @Ctx() context: Context) {
-    return encodeBedSize(await getRoomBeds(context.rpc, root.id));
+    return encodeBedSize(await propertyRpc.getRoomBeds(context.rpc, root.id));
   }
 }
 
-function formatInput(input:  CreateRoomInput | UpdateRoomInput) {
+function formatInput(input: CreateRoomInput | UpdateRoomInput) {
   if (input.category) {
     input["categorySlug"] = input.category;
   }
@@ -162,8 +168,8 @@ function encodeBedSize(bedSize) {
       bedCount: bed.bedCount,
       lengthInCM: bed.length,
       widthInCM: bed.width,
-    }
-  })
+    };
+  });
 }
 
 function decodeBedSize(bedSize: BedSize[]) {
@@ -172,13 +178,12 @@ function decodeBedSize(bedSize: BedSize[]) {
       type: bed.bedType,
       bedCount: bed.bedCount,
       length: bed.lengthInCM,
-      width: bed.widthInCM
-    }
-  })
+      width: bed.widthInCM,
+    };
+  });
 }
 
 function encodeRoomSize(size: string, roomType: string) {
-
   if (!size) {
     return null;
   }
@@ -199,7 +204,7 @@ function encodeRoomSize(size: string, roomType: string) {
     descriptor: roomSizeType,
     minimum: min,
     maximum: max,
-    unitOfArea: roomType
+    unitOfArea: roomType,
   };
 }
 

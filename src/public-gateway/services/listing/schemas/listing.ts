@@ -6,7 +6,7 @@ import {
   ID,
   InputType,
   Int,
-  ObjectType
+  ObjectType,
 } from "type-graphql";
 import { DiscountType } from "../../enum";
 import { MoveInType, MoveOutType, TenancyLengthType } from "../enum";
@@ -86,7 +86,8 @@ export class GetRateAvailabilityArgs {
   pageNumber: number = 1;
   @Field(() => Int)
   pageSize: number = 100;
-  @Field(() => ID)
+
+  @Field(() => ID, { nullable: false })
   roomId: string;
 }
 

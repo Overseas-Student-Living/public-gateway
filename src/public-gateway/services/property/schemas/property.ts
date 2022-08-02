@@ -7,7 +7,7 @@ import {
   InputType,
   ArgsType,
   Directive,
-  Float
+  Float,
 } from "type-graphql";
 import { resolvers as scalar } from "../../../scalars";
 import { PageInfo } from "../../common";
@@ -76,6 +76,12 @@ export class CreatePropertyPayload {
   property: Property;
 
   // TODO reviewlink
+}
+
+@ObjectType()
+export class UpdatePropertyPayload {
+  @Field(() => Property)
+  property: Property;
 }
 
 @ObjectType()

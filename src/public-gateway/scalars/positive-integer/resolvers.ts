@@ -40,6 +40,6 @@ export const resolvers = {
         throw new Error(`invalid format, should be positive integer`);
       }
       return valueNode.value;
-    }
-  })
+    },
+  }),
 };
