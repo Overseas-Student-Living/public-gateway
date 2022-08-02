@@ -20,6 +20,7 @@ import paymentRpc = require("../../../rpc/payment");
 
 @Resolver(() => PropertyTerm)
 export class PropertyTermResolver {
+  // TODO 权限校验
   @Mutation(() => CreatePropertyTermPayload)
   async createPropertyTerm(
     @Arg("input", () => CreatePropertyTermInput, { nullable: false })
