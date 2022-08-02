@@ -8,10 +8,9 @@ import { AuthCallbackFn, checkPropertyIfExist } from "../rules";
 // TODO log word
 async function getListingById(context, args) {
   let listingId = args.id ? args.id : args.listingId;
-
   if (!listingId) {
     throw new UserInputError(
-      "room permission rule cannot execute invalid args"
+      "permission rule cannot execute invalid args"
     );
   }
   if (isNaN(listingId)) {
@@ -20,7 +19,7 @@ async function getListingById(context, args) {
   const listing = await listingRpc.getListing(context.rpc, listingId);
   if (!listing) {
     throw new UserInputError(
-      "listing permission rule cannot execute with Invalid id"
+      "permission rule cannot execute with invalid id"
     );
   }
   return listing;
@@ -28,10 +27,9 @@ async function getListingById(context, args) {
 
 async function getRoomById(context, args) {
   let roomId = args.id ? args.id : args.roomId;
-
   if (!roomId) {
     throw new UserInputError(
-      "room permission rule cannot execute invalid args"
+      "permission rule cannot execute invalid args"
     );
   }
   if (isNaN(roomId)) {
@@ -40,7 +38,7 @@ async function getRoomById(context, args) {
   const room = await propertyRpc.getRoom(context.rpc, roomId);
   if (!room) {
     throw new UserInputError(
-      "room permission rule cannot execute with Invalid id"
+      "permission rule cannot execute with invalid id"
     );
   }
   return room;

@@ -22,7 +22,7 @@ async function getRoomById(context, args) {
   const room = await propertyRpc.getRoom(context.rpc, roomId);
   if (!room) {
     throw new UserInputError(
-      "permission rule cannot execute with Invalid id"
+      "permission rule cannot execute with invalid id"
     );
   }
   return room;
