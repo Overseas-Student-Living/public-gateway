@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   Ctx,
   FieldResolver,
   Mutation,
@@ -17,17 +18,18 @@ import { ResultPayload } from "../../common";
 import { encodeNodeId } from "../../../utils";
 import { AWSS3 } from "../../../s3";
 import paymentRpc = require("../../../rpc/payment");
+import { createPropertyTermRule, deletePropertyTermRule } from "../perm";
 
 @Resolver(() => PropertyTerm)
 export class PropertyTermResolver {
-  // TODO 权限校验
   @Mutation(() => CreatePropertyTermPayload)
+  @Authorized(createPropertyTermRule)
   async createPropertyTerm(
     @Arg("input", () => CreatePropertyTermInput, { nullable: false })
     input: CreatePropertyTermInput,
     @Ctx() context: Context
   ) {
-    // 是否校验propertyId和landlord的对应关系，property状态
+    // 是否校验property状态
     const { createReadStream, filename, mimetype } = await input.file;
     // if (!/\.(png|pdf|docx|PNG|PDF|DOCX)$/.test(filename)) {
     //   throw new GateWayError({
@@ -58,6 +60,7 @@ export class PropertyTermResolver {
   }
 
   @Mutation(() => ResultPayload)
+  @Authorized(deletePropertyTermRule)
   async deletePropertyTerm(
     @Arg("input", () => DeletePropertyTermInput, {
       nullable: false,

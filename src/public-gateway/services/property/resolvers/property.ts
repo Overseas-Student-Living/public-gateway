@@ -157,7 +157,7 @@ export class PropertyResolver {
 
   @FieldResolver(() => [PropertyTerm])
   async propertyTerms(@Root() root: Property, @Ctx() context: Context) {
-    return await paymentRpc.listTermsAndConditionsForProperty(
+    return await paymentRpc.getTermsAndConditions(
       context.rpc,
       root.id
     );

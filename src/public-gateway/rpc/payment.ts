@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import { RpcContext } from "../types/rpc-context";
 
 export const createTermsAndConditions = async (
@@ -21,7 +22,20 @@ export const createTermsAndConditions = async (
   });
 };
 
-export const listTermsAndConditionsForProperty = async (
+
+export const getTermsAndCondition = async (rpc: RpcContext, id) => {
+  const result = await rpc.payments.list_deposit_terms_and_conditions({
+    kwargs: {
+      filters: [{ field: "id", op: "in", value: [id] }],
+    },
+  });
+  if (!isEmpty(result)) {
+    return result[0];
+  }
+  return null;
+}
+
+export const getTermsAndConditions = async (
   rpc: RpcContext,
   propertyId
 ) => {
