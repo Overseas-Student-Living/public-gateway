@@ -13,7 +13,7 @@ async function getRoomById(context, args) {
 
   if (!roomId) {
     throw new UserInputError(
-      "room permission rule cannot execute invalid args"
+      "permission rule cannot execute invalid args"
     );
   }
   if (isNaN(roomId)) {
@@ -22,7 +22,7 @@ async function getRoomById(context, args) {
   const room = await propertyRpc.getRoom(context.rpc, roomId);
   if (!room) {
     throw new UserInputError(
-      "room permission rule cannot execute with Invalid id"
+      "permission rule cannot execute with Invalid id"
     );
   }
   return room;

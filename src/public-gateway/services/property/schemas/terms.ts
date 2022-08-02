@@ -1,7 +1,7 @@
 import { GraphQLUpload } from "graphql-tools";
+import { Upload } from "../../common";
 import { Directive, Field, ID, InputType, ObjectType } from "type-graphql";
 import { resolvers as scalar } from "../../../scalars";
-import { Upload } from "../../common";
 import { PropertyTermStatus } from "../enum";
 
 // Object
