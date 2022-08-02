@@ -9,6 +9,8 @@ export class Country {
   @Field(() => String, { nullable: false })
   name: string;
   @Field(() => String, { nullable: false })
+  countryCode: string;
+  @Field(() => String, { nullable: false })
   currency: string;
   @Field(() => BillingCycle, { nullable: false })
   rentCycle: BillingCycle;

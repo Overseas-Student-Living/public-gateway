@@ -8,7 +8,7 @@ import {
   Resolver,
 } from "type-graphql";
 import { Context } from "../../../types/utils";
-import { updatePropertyFacilitiesRule } from "../perm";
+import { editPropertyPermission } from "../perm";
 import {
   Facility,
   GetFacilitiesPayload,
@@ -28,7 +28,7 @@ export class FacilityResolver {
   }
 
   @Mutation(() => UpdatePropertyFacilitiesPayload)
-  @Authorized(updatePropertyFacilitiesRule)
+  @Authorized(editPropertyPermission)
   async updatePropertyFacilities(
     @Arg("input", () => UpdatePropertyFacilitiesInput)
     input: UpdatePropertyFacilitiesInput,

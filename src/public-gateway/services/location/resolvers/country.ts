@@ -6,33 +6,35 @@ import {
   FieldResolver,
   Query,
   Resolver,
-  Root
-} from "type-graphql";
-import { Context } from "../../../types/utils";
-import { decodeNodeIdForType, encodeNodeId } from "../../../utils";
+  Root,
+} from 'type-graphql';
+import { Context } from '../../../types/utils';
+import { decodeNodeIdForType, encodeNodeId } from '../../../utils';
 import {
   Country,
   GetCountriesArgs,
-  GetCountriesPayload
-} from "../schemas/country";
-import { isEmpty } from "lodash";
+  GetCountriesPayload,
+} from '../schemas/country';
+import { isEmpty } from 'lodash';
 
 @Resolver(Country)
 export class CountryResolver {
   @Query(() => Country)
   @Authorized()
   async getCountry(
-    @Arg("id", () => String) id: string,
+    @Arg('id', () => String) id: string,
     @Ctx() context: Context
   ) {
-    const filters = {
-      field: "id",
-      value: decodeNodeIdForType(id, "Country")
-    };
+    const filters = [
+      {
+        field: 'id',
+        value: decodeNodeIdForType(id, 'Country'),
+      },
+    ];
     const res = await context.rpc.locations.list_simple_countries({
       kwargs: {
-        filters
-      }
+        filters,
+      },
     });
     if (!isEmpty(res)) {
       return res[0];
@@ -45,11 +47,13 @@ export class CountryResolver {
     @Args(() => GetCountriesArgs) args: GetCountriesArgs,
     @Ctx() context: Context
   ) {
+    const filters = [{ field: 'published', value: true }];
     const res = await context.rpc.locations.page_simple_countries({
       kwargs: {
+        filters,
         page_num: args.pageNumber,
-        page_size: args.pageSize
-      }
+        page_size: args.pageSize,
+      },
     });
     if (!isEmpty(res.results)) {
       return {
@@ -58,8 +62,8 @@ export class CountryResolver {
           total: res.numResults,
           totalPages: res.numPages,
           currentPage: args.pageNumber,
-          pageSize: args.pageSize
-        }
+          pageSize: args.pageSize,
+        },
       };
     }
   }
@@ -67,7 +71,7 @@ export class CountryResolver {
   @FieldResolver()
   id(@Root() root: Country) {
     if (root.id) {
-      return encodeNodeId("Country", root.id);
+      return encodeNodeId('Country', root.id);
     }
   }
 
