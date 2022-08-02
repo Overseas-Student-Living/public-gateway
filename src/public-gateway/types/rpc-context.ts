@@ -34,6 +34,7 @@ interface LocationService extends ServiceBase {
 
 interface PropertyService extends ServiceBase {
   create_property: rpcMethod;
+  count_active_properties: rpcMethod;
   list_active_properties: rpcMethod;
   page_active_properties: rpcMethod;
   update_property_details: rpcMethod;

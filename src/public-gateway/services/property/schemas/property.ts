@@ -44,7 +44,7 @@ export class Property {
   @Field(() => BookingJourney, { nullable: false })
   bookingType: BookingJourney;
 
-  @Field(() => String!)
+  @Field(() => String, { nullable: false })
   zipCode: string;
   @Field(() => String)
   address: string;

@@ -4,13 +4,15 @@ import { BillingCycle } from "../../enum";
 
 @ObjectType()
 export class Country {
-  @Field(() => ID!)
+  @Field(() => ID, { nullable: false })
   id: string;
-  @Field(() => String!)
+  @Field(() => String, { nullable: false })
   name: string;
-  @Field(() => String!)
+  @Field(() => String, { nullable: false })
+  countryCode: string;
+  @Field(() => String, { nullable: false })
   currency: string;
-  @Field(() => BillingCycle!)
+  @Field(() => BillingCycle, { nullable: false })
   rentCycle: BillingCycle;
 }
 

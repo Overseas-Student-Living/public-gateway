@@ -1,4 +1,4 @@
-import { RpcContext } from "../types/rcp-context";
+import { RpcContext } from "../types/rpc-context";
 
 export const createTermsAndConditions = async (
   rpc: RpcContext,

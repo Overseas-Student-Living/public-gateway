@@ -39,6 +39,7 @@ import { groupFacilities } from "../utils";
 @Resolver(() => Property)
 export class PropertyResolver {
   @Query(() => GetPropertyPayload)
+  @Authorized()
   @decodeBase64(["id"])
   async getProperty(@Arg("id", () => ID) id: string, @Ctx() context: Context) {
     // 是否需要判断该property是否属于该landlord
