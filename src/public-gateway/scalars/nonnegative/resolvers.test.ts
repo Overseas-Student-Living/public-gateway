@@ -21,7 +21,7 @@ describe("resolvers NonNegative", () => {
       const result = resolver.parseLiteral(
         {
           kind: "StringValue",
-          value: "1"
+          value: "1",
         },
         {}
       );
@@ -33,7 +33,7 @@ describe("resolvers NonNegative", () => {
         resolver.parseLiteral(
           {
             kind: "StringValue",
-            value: "-1"
+            value: "-1",
           },
           {}
         );
@@ -46,7 +46,7 @@ describe("resolvers NonNegative", () => {
       const value = resolver.parseLiteral(
         {
           kind: "StringValue",
-          value: "1"
+          value: "1",
         },
         {}
       );

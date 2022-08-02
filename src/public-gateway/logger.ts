@@ -33,7 +33,7 @@ const logger = createLogger({
     myFormat
   ),
   transports: [new transports.Console()],
-  exceptionHandlers: [new transports.Console()]
+  exceptionHandlers: [new transports.Console()],
 });
 
 export function getLogger(moduleName: string) {
@@ -42,6 +42,6 @@ export function getLogger(moduleName: string) {
       return (...args) => {
         target[logLevel](...args, { moduleName });
       };
-    }
+    },
   });
 }

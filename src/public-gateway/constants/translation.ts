@@ -17,5 +17,5 @@ export const LOCALES = [
   "vi-vn",
   "zh-cn",
   "zh-hk",
-  "zh-tw"
+  "zh-tw",
 ];

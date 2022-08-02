@@ -5,40 +5,40 @@ export enum RoomCategory {
   ENTIRE_PLACE = "entire-place",
   PRIVATE_ROOM = "private-room",
   SHARED_ROOM = "shared-room",
-  STUDIO = "studio"
+  STUDIO = "studio",
 }
 
 registerEnumType(RoomCategory, {
-  name: "RoomCategory"
+  name: "RoomCategory",
 });
 
 export enum RoomSizeUnit {
   SQM = "sqm",
-  SQFT = "sqft"
+  SQFT = "sqft",
 }
 
 registerEnumType(RoomSizeUnit, {
-  name: "RoomSizeUnit"
+  name: "RoomSizeUnit",
 });
 
 export enum BedSizeType {
   UNIFIED = "unified",
-  DIFFERENT = "different"
+  DIFFERENT = "different",
 }
 
 registerEnumType(BedSizeType, {
-  name: "BedSizeType"
+  name: "BedSizeType",
 });
 
 export enum DualOccupancy {
   DUAL_OCCUPANCY_ALLOWED = "dual_occupancy_allowed",
   FREE_DUAL_OCCUPANCY = "free_dual_occupancy",
   CHARGED_DUAL_OCCUPANCY = "charged_dual_occupancy",
-  DUAL_OCCUPANCY_NOT_ALLOWED = "dual_occupancy_not_allowed"
+  DUAL_OCCUPANCY_NOT_ALLOWED = "dual_occupancy_not_allowed",
 }
 
 registerEnumType(DualOccupancy, {
-  name: "DualOccupancy"
+  name: "DualOccupancy",
 });
 
 export enum BathroomTypeCategory {
@@ -46,47 +46,47 @@ export enum BathroomTypeCategory {
   PRIVATE_NON_ENSUITE = "private-non-ensuite",
   SHARED_ENSUITE = "shared-ensuite",
   SHARED_NON_ENSUITE = "shared-non-ensuite",
-  MIXED = "mixed"
+  MIXED = "mixed",
 }
 
 registerEnumType(BathroomTypeCategory, {
-  name: "BathroomTypeCategory"
+  name: "BathroomTypeCategory",
 });
 
 export enum KitchenArrangement {
   PRIVATE = "private",
-  SHARED = "shared"
+  SHARED = "shared",
 }
 
 registerEnumType(KitchenArrangement, {
-  name: "KitchenArrangement"
+  name: "KitchenArrangement",
 });
 
 export enum GenderMix {
   MALE_ONLY = "male-only",
   FEMALE_ONLY = "female-only",
-  MIXED = "mixed"
+  MIXED = "mixed",
 }
 
 registerEnumType(GenderMix, {
-  name: "GenderMix"
+  name: "GenderMix",
 });
 
 export enum DietaryPreference {
-  VEGETARIAN = "vegetarian"
+  VEGETARIAN = "vegetarian",
 }
 
 registerEnumType(DietaryPreference, {
-  name: "DietaryPreference"
+  name: "DietaryPreference",
 });
 
 export enum SmokingPreference {
   NON_SMOKING = "non-smoking",
-  SMOKING = "smoking"
+  SMOKING = "smoking",
 }
 
 registerEnumType(SmokingPreference, {
-  name: "SmokingPreference"
+  name: "SmokingPreference",
 });
 
 export enum BedType {
@@ -100,19 +100,19 @@ export enum BedType {
   QUEEN_BED = "queen_bed",
   KING_SIZE_BED = "king_size_bed",
   TWIN_BED = "twin_bed",
-  BUNK_BED = "bunk_bed"
+  BUNK_BED = "bunk_bed",
 }
 
 registerEnumType(BedType, {
-  name: "BedType"
+  name: "BedType",
 });
 
 export enum RoomSizeType {
   EXACT = "exact",
   BETWEEN = "between",
-  MORE_THAN = "more_than"
+  MORE_THAN = "more_than",
 }
 
 registerEnumType(RoomSizeType, {
-  name: "RoomSizeType"
+  name: "RoomSizeType",
 });

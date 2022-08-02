@@ -16,7 +16,7 @@ export async function generateTypeGraphqlSchema() {
     // @ts-ignore
     resolvers: typeResolvers,
     authChecker: requirePermChecker,
-    nullableByDefault: true
+    nullableByDefault: true,
   });
   SchemaDirectiveVisitor.visitSchemaDirectives(schema, schemaDirectives);
 

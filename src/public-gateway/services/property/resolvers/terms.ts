@@ -4,28 +4,26 @@ import {
   FieldResolver,
   Mutation,
   Resolver,
-  Root
+  Root,
 } from "type-graphql";
 import { Context } from "../../../types/utils";
 import {
   CreatePropertyTermInput,
   CreatePropertyTermPayload,
   DeletePropertyTermInput,
-  PropertyTerm
+  PropertyTerm,
 } from "../schemas/terms";
 import { ResultPayload } from "../../common";
 import { encodeNodeId } from "../../../utils";
 import { AWSS3 } from "../../../s3";
-import {
-  createTermsAndConditions,
-  deleteTermsAndConditions
-} from "../../../rpc/payment";
+import paymentRpc = require("../../../rpc/payment");
 
 @Resolver(() => PropertyTerm)
 export class PropertyTermResolver {
+  // TODO 权限校验
   @Mutation(() => CreatePropertyTermPayload)
   async createPropertyTerm(
-    @Arg("input", () => CreatePropertyTermInput)
+    @Arg("input", () => CreatePropertyTermInput, { nullable: false })
     input: CreatePropertyTermInput,
     @Ctx() context: Context
   ) {
@@ -42,12 +40,12 @@ export class PropertyTermResolver {
       secretAccessKey: process.env.AWS_S3_STORM_FRONTEND_SECRET,
       region: process.env.AWS_S3_STORM_FRONTEND_REGION,
       destinationBucketName: process.env.AWS_S3_STORM_FRONTEND_BUCKET,
-      folder: process.env.AWS_S3_STORM_FRONTEND_FOLDER
+      folder: process.env.AWS_S3_STORM_FRONTEND_FOLDER,
     });
     const s3Obj = await s3Client.upload(createReadStream(), filename, mimetype);
     const url = `${process.env.AWS_S3_STORM_FRONTEND_DOMAIN}${s3Obj.Key}`;
 
-    const result = await createTermsAndConditions(
+    const result = await paymentRpc.createTermsAndConditions(
       context.rpc,
       input.propertyId,
       input.title,
@@ -62,12 +60,12 @@ export class PropertyTermResolver {
   @Mutation(() => ResultPayload)
   async deletePropertyTerm(
     @Arg("input", () => DeletePropertyTermInput, {
-      nullable: false
+      nullable: false,
     })
     input: DeletePropertyTermInput,
     @Ctx() context: Context
   ) {
-    await deleteTermsAndConditions(context.rpc, input.id);
+    await paymentRpc.deleteTermsAndConditions(context.rpc, input.id);
     return { result: true };
   }
 

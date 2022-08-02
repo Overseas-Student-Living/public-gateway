@@ -15,7 +15,7 @@ export const redis =
         parseInt(process.env.REDIS_PORT, 10) || 6379,
         process.env.REDIS_SERVER,
         {
-          db: parseInt(process.env.REDIS_DB, 10)
+          db: parseInt(process.env.REDIS_DB, 10),
         }
       );
 
@@ -48,7 +48,7 @@ export const cacheStore: CacheStore = {
 
   async destroy(key: string) {
     await redis.del(key);
-  }
+  },
 };
 
 export function cacheContextMiddleware_(req, _, next) {

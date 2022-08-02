@@ -41,12 +41,12 @@ export function tracerRequestMiddleware({ serviceName, ignorePaths }) {
           method: req.method,
           protocol: req.protocol,
           headers: getHeaderForTracer(req.headers),
-          xhr: req.xhr
-        }
+          xhr: req.xhr,
+        },
       },
       stage: "request",
       client_ip: req.headers["x-real-ip"],
-      user_agent: req.headers["user-agent"]
+      user_agent: req.headers["user-agent"],
     };
 
     log.info("entrypoint request trace:\n%j", logData);
@@ -60,7 +60,7 @@ export function tracerRequestMiddleware({ serviceName, ignorePaths }) {
 const getOperation = requestBody => {
   const operation = {
     name: "",
-    type: ""
+    type: "",
   };
   if (requestBody) {
     const reg = /(query|mutation)/i;
@@ -87,7 +87,7 @@ const getResponseLog = (responseBody, responseLength, responseStatus) => {
       return { errors: responseBody.errors };
     }
     return {
-      data: `Hide response which is over ${maxResponseLength} character.`
+      data: `Hide response which is over ${maxResponseLength} character.`,
     };
   }
   return responseBody;
@@ -140,8 +140,8 @@ export function tracerResponseMiddleware({ serviceName, ignorePaths }) {
           method: req.method,
           protocol: req.protocol,
           headers: getHeaderForTracer(req.headers),
-          xhr: req.xhr
-        }
+          xhr: req.xhr,
+        },
       },
       operation_type: operation.type,
       operation_name: operation.name,
@@ -158,8 +158,8 @@ export function tracerResponseMiddleware({ serviceName, ignorePaths }) {
       response_time: (Date.now() - req.startTime) / 1000, // in seconds
       entrypoint_name: next ? req.path : req.baseUrl,
       response: {
-        body: getResponseLog(responseBody, responseLength, responseStatus)
-      }
+        body: getResponseLog(responseBody, responseLength, responseStatus),
+      },
     };
 
     log.info("entrypoint result trace:\n%j", logData);

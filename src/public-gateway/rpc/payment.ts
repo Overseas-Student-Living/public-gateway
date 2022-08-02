@@ -15,9 +15,9 @@ export const createTermsAndConditions = async (
         url,
         property_id: propertyId,
         valid_from: validFrom,
-        valid_till: validTill
-      }
-    ]
+        valid_till: validTill,
+      },
+    ],
   });
 };
 
@@ -32,13 +32,13 @@ export const listTermsAndConditionsForProperty = async (
   filters.push({ field: "property_id", value: propertyId });
   return await rpc.payments.list_deposit_terms_and_conditions({
     kwargs: {
-      filters: filters
-    }
+      filters: filters,
+    },
   });
 };
 
 export const deleteTermsAndConditions = async (rpc: RpcContext, id) => {
   return rpc.payments.delete_deposit_terms_and_conditions({
-    args: [id]
+    args: [id],
   });
 };

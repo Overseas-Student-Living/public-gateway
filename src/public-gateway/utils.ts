@@ -43,6 +43,10 @@ export function decodeNodeId(nodeId) {
   return result;
 }
 
+export function decodeBase64Id(nodeId) {
+  return decodeNodeId(nodeId).id;
+}
+
 export function decodeNodeIdForType(nodeId, expectedType) {
   if (nodeId === undefined || nodeId === null) {
     return nodeId;
@@ -58,6 +62,10 @@ export function formatPageInfo(list, total, pageNumber, pageSize) {
     pageSize,
     results: list,
     numResults: total,
-    numPages: ceil(total / pageSize)
+    numPages: ceil(total / pageSize),
   };
+}
+
+export function getStudentUrl() {
+  return `https://${process.env.DOMAIN}`;
 }

@@ -7,7 +7,7 @@ import {
   ID,
   InputType,
   Int,
-  ObjectType
+  ObjectType,
 } from "type-graphql";
 import {
   BathroomTypeCategory,
@@ -20,7 +20,7 @@ import {
   RoomCategory,
   BedType,
   RoomSizeUnit,
-  RoomSizeType
+  RoomSizeType,
 } from "../enum";
 import { Facility } from "../../property/schemas/facilities";
 import { PageInfo } from "../../common";
@@ -106,7 +106,6 @@ export class Room {
   bedSizes: BedSize[];
 }
 
-
 @ObjectType()
 export class GetRoomPayload {
   @Field(() => Room)
@@ -121,12 +120,12 @@ export class GetRoomsPayload {
 }
 
 @ArgsType()
-export class GetRoomArgs {
+export class GetRoomsArgs {
   @Field(() => Int)
   pageNumber: number = 1;
   @Field(() => Int)
   pageSize: number = 100;
-  @Field(() => ID)
+  @Field(() => ID, { nullable: false })
   propertyId: string;
 }
 

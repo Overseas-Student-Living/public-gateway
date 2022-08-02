@@ -9,7 +9,7 @@ const serviceName = process.env.IMAGE_NAME || "public-gateway";
 
 const tracerOptions = {
   serviceName,
-  ignorePaths: ["/metrics", "/healthcheck"]
+  ignorePaths: ["/metrics", "/healthcheck"],
 };
 export const tracerRequestHandler = tracerRequestMiddleware(tracerOptions);
 export const tracerResponseHandler = tracerResponseMiddleware(tracerOptions);
@@ -19,7 +19,7 @@ const middlewares = [
   callIdMiddleware({ serviceName }),
   namekoRpcContextMiddleware,
   cacheContextMiddleware,
-  apiTokenAuthMiddleware
+  apiTokenAuthMiddleware,
 ];
 
 export default middlewares;

@@ -8,7 +8,7 @@ const getApolloConfig = () => {
       key: process.env.APOLLO_ENGINE_API_KEY,
       graphRef: `${process.env.APOLLO_ENGINE_API_KEY.split(":")[1]}@${(
         process.env.ENV || "stage"
-      ).toLowerCase()}`
+      ).toLowerCase()}`,
     };
   }
   return undefined;
@@ -27,7 +27,7 @@ export async function generateApolloConfiguration() {
       return {
         req,
         res,
-        rpc: req.rpc
+        rpc: req.rpc,
       };
     },
     formatResponse(responseBody, gqlOptions) {
@@ -37,11 +37,11 @@ export async function generateApolloConfiguration() {
         null,
         {
           responseBody,
-          responseStatus: responseBody.errors ? "error" : "success"
+          responseStatus: responseBody.errors ? "error" : "success",
         }
       );
       return responseBody;
-    }
+    },
   };
 }
 

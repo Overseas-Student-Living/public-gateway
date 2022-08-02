@@ -7,7 +7,7 @@ const acceptedFormats = [
   "YYYY-MM-DD HH:mm:ss",
   "YYYY-MM-DDTHH:mm:ss",
   "YYYY-MM-DD",
-  fullFormat
+  fullFormat,
 ];
 
 function isValid(date) {
@@ -39,6 +39,6 @@ export const resolvers = {
       return moment
         .utc(valueNode.value, acceptedFormats, true)
         .format(fullFormat);
-    }
-  })
+    },
+  }),
 };

@@ -6,7 +6,7 @@ import {
   ID,
   InputType,
   Int,
-  ObjectType
+  ObjectType,
 } from "type-graphql";
 import { DiscountType } from "../../enum";
 import { MoveInType, MoveOutType, TenancyLengthType } from "../enum";
@@ -86,7 +86,8 @@ export class GetRateAvailabilityArgs {
   pageNumber: number = 1;
   @Field(() => Int)
   pageSize: number = 100;
-  @Field(() => ID)
+
+  @Field(() => ID, { nullable: false })
   roomId: string;
 }
 
@@ -135,7 +136,7 @@ export class TenancyInput {
 
 @InputType()
 export class CreateRateAvailabilityInput {
-  @Directive('@decodeID(type: "Listing", required: true)')
+  @Directive('@decodeID(type: "UnitType", required: true)')
   @Field(() => ID, { nullable: false })
   roomId: string;
 

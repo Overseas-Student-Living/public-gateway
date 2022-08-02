@@ -4,7 +4,7 @@ import { RpcContext } from "../types/rpc-context";
 
 export const createProperty = async (rpc: RpcContext, input) => {
   return await rpc.properties.create_property({
-    args: [decamelizeKeys(input)]
+    args: [decamelizeKeys(input)],
   });
 };
 
@@ -12,8 +12,8 @@ export const getProperty = async (rpc: RpcContext, id) => {
   // translation？
   const result = await rpc.properties.list_active_properties({
     kwargs: {
-      filters: [{ field: "id", op: "in", value: [id] }]
-    }
+      filters: [{ field: "id", op: "in", value: [id] }],
+    },
   });
   if (!isEmpty(result)) {
     return result[0];
@@ -28,7 +28,7 @@ async function resolveListPropertiesFilters({
   country,
   apartmentType,
   bookingType,
-  status
+  status,
 }) {
   const filters = [];
   if (name) {
@@ -74,14 +74,14 @@ export const getProperties = async (
     country,
     apartmentType,
     bookingType,
-    status
+    status,
   });
   const results = await rpc.properties.page_active_properties({
     kwargs: {
       filters,
       page_num: pageNumber,
-      page_size: pageSize
-    }
+      page_size: pageSize,
+    },
   });
   return results;
 };
@@ -89,8 +89,8 @@ export const getProperties = async (
 export const getRoom = async (rpc: RpcContext, id) => {
   const result = await rpc.properties.list_active_unit_types({
     kwargs: {
-      filters: [{ field: "id", op: "in", value: [id] }]
-    }
+      filters: [{ field: "id", op: "in", value: [id] }],
+    },
   });
   if (!isEmpty(result)) {
     return result[0];
@@ -112,8 +112,8 @@ export const getRooms = async (
     kwargs: {
       filters,
       page_num: pageNumber,
-      page_size: pageSize
-    }
+      page_size: pageSize,
+    },
   });
   return results;
 };
@@ -136,14 +136,14 @@ export const getRoomFacilities = async (rpc: RpcContext, roomId) => {
 
 export const getRoomBeds = async (rpc: RpcContext, roomId) => {
   return await rpc.properties.list_bed_sizes_for_unit_type({ args: [roomId] });
-}
+};
 
 export const updatePropertyDetail = async (rpc: RpcContext, input) => {
   return await rpc.properties.update_property_details({
     kwargs: {
       id_: input.propertyId,
       data: decamelizeKeys(input),
-      draft_check: false
-    }
+      draft_check: false,
+    },
   });
 };

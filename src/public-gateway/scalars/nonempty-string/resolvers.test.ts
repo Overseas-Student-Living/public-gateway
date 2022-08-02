@@ -21,7 +21,7 @@ describe("resolvers NonEmptyString", () => {
       const result = resolver.parseLiteral(
         {
           kind: "StringValue",
-          value: "NonEmptyString"
+          value: "NonEmptyString",
         },
         {}
       );
@@ -33,7 +33,7 @@ describe("resolvers NonEmptyString", () => {
         resolver.parseLiteral(
           {
             kind: "StringValue",
-            value: " "
+            value: " ",
           },
           {}
         );
@@ -46,7 +46,7 @@ describe("resolvers NonEmptyString", () => {
       const value = resolver.parseLiteral(
         {
           kind: "StringValue",
-          value: "NonEmptyString"
+          value: "NonEmptyString",
         },
         {}
       );

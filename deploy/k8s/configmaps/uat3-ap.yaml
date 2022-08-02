@@ -5,13 +5,12 @@ metadata:
   namespace: uat3
 data:
   DISABLE_LOG_COLORS: 'true'
-  DOMAIN: uat3.dandythrust.com
+  DOMAIN: uat3-www.dandythrust.com
   RABBIT_SERVER: rabbitmq-rabbitmq-ha.uat3.svc.cluster.local
   S3_POLICY: >-
     {"Version":"2012-10-17","Statement":[{"Sid":"VisualEditor1","Effect":"Allow","Action":"s3:*","Resource":"arn:aws:s3:::stage-osl-video-sources-ap-southeast-1/*"}]}
   S3_UPLOAD_ROLE: 'arn:aws:iam::091107424697:role/stageS3Video'
   S3_VIDEO_BUCKET: stage-osl-video-sources-ap-southeast-1
-  MESSAGE_CENTER_API_HOST: https://message-center-server-uat3.dandythrust.com
   IMAGE_CDN_HOST: dandythrust.com
   AWS_S3_OPPORTUNITY_DOCUMENT_BUCKET: stage-opportunity-documents
   AWS_S3_REGION: ap-southeast-1

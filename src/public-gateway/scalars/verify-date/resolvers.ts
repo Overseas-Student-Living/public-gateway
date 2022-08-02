@@ -24,6 +24,6 @@ export const resolvers = {
         throw new Error('invalid date format, should be "YYYY-MM-DD"');
       }
       return valueNode.value;
-    }
-  })
+    },
+  }),
 };

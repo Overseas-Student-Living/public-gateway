@@ -6,14 +6,14 @@ import {
   FieldResolver,
   Query,
   Resolver,
-  Root
+  Root,
 } from "type-graphql";
 import { Context } from "../../../types/utils";
 import { decodeNodeIdForType, encodeNodeId } from "../../../utils";
 import {
   Country,
   GetCountriesArgs,
-  GetCountriesPayload
+  GetCountriesPayload,
 } from "../schemas/country";
 import { isEmpty } from "lodash";
 
@@ -27,12 +27,12 @@ export class CountryResolver {
   ) {
     const filters = {
       field: "id",
-      value: decodeNodeIdForType(id, "Country")
+      value: decodeNodeIdForType(id, "Country"),
     };
     const res = await context.rpc.locations.list_simple_countries({
       kwargs: {
-        filters
-      }
+        filters,
+      },
     });
     if (!isEmpty(res)) {
       return res[0];
@@ -48,8 +48,8 @@ export class CountryResolver {
     const res = await context.rpc.locations.page_simple_countries({
       kwargs: {
         page_num: args.pageNumber,
-        page_size: args.pageSize
-      }
+        page_size: args.pageSize,
+      },
     });
     if (!isEmpty(res.results)) {
       return {
@@ -58,8 +58,8 @@ export class CountryResolver {
           total: res.numResults,
           totalPages: res.numPages,
           currentPage: args.pageNumber,
-          pageSize: args.pageSize
-        }
+          pageSize: args.pageSize,
+        },
       };
     }
   }

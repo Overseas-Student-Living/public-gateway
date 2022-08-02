@@ -4,7 +4,7 @@ import { decamelizeKeys } from "humps";
 import { asyncMiddleware, transFrontendScopesToBackend } from "../utils";
 
 import { getLogger } from "../logger";
-import { getUserFromApiToken } from "../rpc/user";
+import userRpc = require("../rpc/user");
 
 const log = getLogger("auth");
 
@@ -26,13 +26,13 @@ async function apiTokenAuthMiddleware_(req, res, next) {
   const apiToken = req.headers["x-api-token"];
   // 没有apitoken的处理，或者长度不对的校验
   if (isString(apiToken)) {
-    const result = await getUserFromApiToken(req.rpc, apiToken);
+    const result = await userRpc.getUserFromApiToken(req.rpc, apiToken);
     if (result) {
       const currentRole = result.role;
       req.user = {
         roleId: result.roleId,
         uuid: result.uuid,
-        currentRole: currentRole
+        currentRole: currentRole,
       };
 
       // get current role scope from cache
@@ -40,7 +40,7 @@ async function apiTokenAuthMiddleware_(req, res, next) {
       let currentScopes = await req.cache.get(keyForRoleScope(currentRole));
       if (!currentScopes) {
         await req.rpc.users.refresh_role_scopes({
-          args: [{ role: currentRole }]
+          args: [{ role: currentRole }],
         });
         currentScopes = await req.cache.get(keyForRoleScope(currentRole));
       }

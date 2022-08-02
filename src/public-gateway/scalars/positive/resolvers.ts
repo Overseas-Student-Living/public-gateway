@@ -29,6 +29,6 @@ export const resolvers = {
         throw new Error(`invalid format, should be Positive number`);
       }
       return valueNode.value;
-    }
-  })
+    },
+  }),
 };

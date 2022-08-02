@@ -25,6 +25,6 @@ export const resolvers = {
         throw new Error(`cannot be an empty string`);
       }
       return valueNode.value;
-    }
-  })
+    },
+  }),
 };
