@@ -173,7 +173,7 @@ export class PropertyResolver {
 }
 
 async function getPropertyrReviewLink(property, city) {
-  return `${getStudentUrl()}/${city.country.slug}/${city.slug}/${
+  return `${getStudentUrl()}/${city.country.slug}/${city.slug}/p/${
     property.slug
   }?preview=yes&update_cache=yes`;
 }
