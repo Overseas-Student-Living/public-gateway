@@ -19,7 +19,7 @@ async function getProertyTermById(context, args) {
   const term = await paymentRpc.getTermsAndCondition(context.rpc, termId);
   if (!term) {
     throw new UserInputError(
-      "permission rule cannot execute with Invalid id"
+      "permission rule cannot execute with invalid id"
     );
   }
   return term;
