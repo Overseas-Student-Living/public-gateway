@@ -5,12 +5,11 @@ metadata:
   namespace: prod
 data:
   DISABLE_LOG_COLORS: 'true'
-  DOMAIN: student.com
+  DOMAIN: wwww.student.com
   RABBIT_SERVER: rabbitmq-services
   S3_POLICY: '{"Version":"2012-10-17","Statement":[{"Sid":"Stmt1487323648000","Effect":"Allow","Action":["s3:*"],"Resource":["arn:aws:s3:::prod-osl-video-sources-ap-southeast-1/*"]}]}'
   S3_UPLOAD_ROLE: 'arn:aws:iam::091107424697:role/prodS3Video'
   S3_VIDEO_BUCKET: 'prod-osl-video-sources-ap-southeast-1'
-  MESSAGE_CENTER_API_HOST: https://message-center-server.student.com
   IMAGE_CDN_HOST: student.com
   AWS_S3_OPPORTUNITY_DOCUMENT_BUCKET: prod-opportunity-documents
   AWS_S3_REGION: ap-southeast-1

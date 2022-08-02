@@ -75,7 +75,8 @@ export class CreatePropertyPayload {
   @Field(() => Property)
   property: Property;
 
-  // TODO reviewlink
+  @Field(() => String)
+  reviewlink: string;
 }
 
 @ObjectType()

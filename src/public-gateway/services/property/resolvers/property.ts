@@ -12,7 +12,7 @@ import {
 } from "type-graphql";
 
 import { Context } from "../../../types/utils";
-import { encodeNodeId } from "../../../utils";
+import { encodeNodeId, getStudentUrl } from "../../../utils";
 
 import propertyRpc = require("../../../rpc/property");
 import paymentRpc = require("../../../rpc/payment");
@@ -97,10 +97,8 @@ export class PropertyResolver {
       input["currency"] = city.country.currencyCode;
       input["billingCycle"] = city.country.billingCycle;
     }
-
     const property = await propertyRpc.createProperty(context.rpc, input);
-
-    return { property };
+    return { property, reviewlink: getPropertyrReviewLink(property, city) };
   }
 
   @Mutation(() => UpdatePropertyPayload)
@@ -172,4 +170,10 @@ export class PropertyResolver {
     });
     return groupFacilities(facilities);
   }
+}
+
+async function getPropertyrReviewLink(property, city) {
+  return `${getStudentUrl()}/${city.country.slug}/${city.slug}/${
+    property.slug
+  }?preview=yes&update_cache=yes`;
 }

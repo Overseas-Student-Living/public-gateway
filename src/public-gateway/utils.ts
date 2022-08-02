@@ -65,3 +65,7 @@ export function formatPageInfo(list, total, pageNumber, pageSize) {
     numPages: ceil(total / pageSize),
   };
 }
+
+export function getStudentUrl() {
+  return `https://${process.env.DOMAIN}`;
+}
