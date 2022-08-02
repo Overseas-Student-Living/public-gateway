@@ -1,6 +1,6 @@
 import { checkPropertyBelongToLandlord } from "../rules";
 
-export const editPropertyPermission = {
+export const updatePropertyFacilitiesRule = {
   table: {
     scopes: [
       "c:properties.property_facilities",

@@ -4,31 +4,34 @@ import {
   Authorized,
   Ctx,
   FieldResolver,
+  ID,
   Query,
   Resolver,
   Root,
 } from 'type-graphql';
 import { Context } from '../../../types/utils';
-import { decodeNodeIdForType, encodeNodeId } from '../../../utils';
+import { encodeNodeId } from '../../../utils';
 import {
   Country,
   GetCountriesArgs,
   GetCountriesPayload,
 } from '../schemas/country';
 import { isEmpty } from 'lodash';
+import { decodeBase64 } from '../../../decorators/base64';
 
 @Resolver(Country)
 export class CountryResolver {
   @Query(() => Country)
+  @decodeBase64(['id'])
   @Authorized()
   async getCountry(
-    @Arg('id', () => String) id: string,
+    @Arg('id', () => ID, { nullable: false }) id: string,
     @Ctx() context: Context
   ) {
     const filters = [
       {
         field: 'id',
-        value: decodeNodeIdForType(id, 'Country'),
+        value: id,
       },
     ];
     const res = await context.rpc.locations.list_simple_countries({

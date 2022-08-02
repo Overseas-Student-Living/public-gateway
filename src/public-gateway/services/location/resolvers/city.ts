@@ -4,6 +4,7 @@ import {
   Authorized,
   Ctx,
   FieldResolver,
+  ID,
   Query,
   Resolver,
   Root,
@@ -12,16 +13,21 @@ import { Context } from '../../../types/utils';
 import { decodeNodeIdForType, encodeNodeId } from '../../../utils';
 import { City, GetCitiesArgs, GetCitiesPayload } from '../schemas/city';
 import { isEmpty } from 'lodash';
+import { decodeBase64 } from '../../../decorators/base64';
 
 @Resolver(City)
 export class CityResolver {
   @Query(() => City)
+  @decodeBase64(['id'])
   @Authorized()
-  async getCity(@Arg('id', () => String) id: string, @Ctx() context: Context) {
+  async getCity(
+    @Arg('id', () => ID, { nullable: false }) id: string,
+    @Ctx() context: Context
+  ) {
     const filters = [
       {
         field: 'id',
-        value: decodeNodeIdForType(id, 'City'),
+        value: id,
       },
     ];
     const res = await context.rpc.locations.list_simple_cities({
@@ -48,7 +54,7 @@ export class CityResolver {
       {
         field: 'published',
         value: true,
-      }
+      },
     ];
     const res = await context.rpc.locations.page_simple_cities({
       kwargs: {
