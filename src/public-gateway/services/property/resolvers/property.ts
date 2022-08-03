@@ -101,7 +101,7 @@ export class PropertyResolver {
       input["billingCycle"] = city.country.billingCycle;
     }
     const property = await propertyRpc.createProperty(context.rpc, input);
-    return { property, reviewlink: getPropertyrReviewLink(property, city) };
+    return { property, reviewLink: getPropertyrReviewLink(property, city) };
   }
 
   @Mutation(() => UpdatePropertyPayload)
