@@ -47,7 +47,7 @@ export class Property {
   @Field(() => String, { nullable: false })
   zipCode: string;
   @Field(() => String)
-  address: string;
+  addressLine1: string;
   @Field(() => String)
   addressLine2: string;
 
@@ -55,9 +55,9 @@ export class Property {
   apartmentType: ApartmentType;
 
   @Field(() => String)
-  headlineCn: string;
+  tagLineCn: string;
   @Field(() => String)
-  headline: string;
+  tagLine: string;
   @Field(() => String)
   descriptionCn: string;
   @Field(() => String)
@@ -111,7 +111,7 @@ export class CreatePropertyInput {
 
   @MaxLength(200)
   @Field(() => scalar.NonEmptyString, { nullable: false })
-  address: string;
+  addressLine1: string;
 
   @MaxLength(200)
   @Field(() => String)
@@ -133,11 +133,11 @@ export class CreatePropertyInput {
 
   @MaxLength(400)
   @Field(() => String)
-  headlineCn: string;
+  tagLineCn: string;
 
   @MaxLength(400)
   @Field(() => scalar.NonEmptyString, { nullable: false })
-  headline: string;
+  tagLine: string;
 
   @MaxLength(400)
   @Field(() => String)
