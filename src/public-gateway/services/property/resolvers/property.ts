@@ -86,6 +86,9 @@ export class PropertyResolver {
     @Ctx() context: Context
   ) {
     input["postalCode"] = input.zipCode;
+    input["address"] = input.addressLine1;
+    input["headline"] = input.tagLine;
+    input["headlineCn"] = input.tagLineCn;
     input["propertyType"] = input.apartmentType;
     input["landlordId"] = context.req.user.roleId;
     input["accountManager"] = context.req.user.email;
@@ -135,6 +138,24 @@ export class PropertyResolver {
   async zipCode(@Root() root: Property) {
     // @ts-ignore
     return root.postalCode;
+  }
+
+  @FieldResolver()
+  async tagLine(@Root() root: Property) {
+    // @ts-ignore
+    return root.headline;
+  }
+
+  @FieldResolver()
+  async tagLineCn(@Root() root: Property) {
+    // @ts-ignore
+    return root.headlineCn;
+  }
+
+  @FieldResolver()
+  async addressLine1(@Root() root: Property) {
+    // @ts-ignore
+    return root.address;
   }
 
   @FieldResolver()
